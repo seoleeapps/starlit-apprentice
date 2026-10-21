@@ -1,0 +1,318 @@
+{
+  "schemaVersion": 1,
+  "events": [
+    {
+      "id": "cond.burnout.enter",
+      "fixture": {
+        "turn": 6,
+        "deck": 0,
+        "action": "work.chores",
+        "stress": 94,
+        "eventGold": 240
+      },
+      "cases": [
+        {
+          "id": "c-only",
+          "choice": "c",
+          "outcome": "only",
+          "labelContains": {
+            "ko": "따뜻한 식사와 휴식",
+            "en": "warm meals and rest"
+          },
+          "resultContains": {
+            "ko": "따뜻한 식사",
+            "en": "Warm meals"
+          }
+        }
+      ]
+    },
+    {
+      "id": "milestone.s3.favorite",
+      "fixture": {
+        "turn": 27,
+        "deck": 0,
+        "action": "rest.home",
+        "eventGold": 300,
+        "reputation": 60,
+        "stats": {
+          "intellect": 70
+        },
+        "flags": {
+          "milestone:s1:pass": 1,
+          "milestone:s2:pass": 1
+        }
+      },
+      "bodyContains": {
+        "ko": "예상 순위표가 붙어 있다",
+        "en": "A predicted ranking"
+      },
+      "cases": [
+        {
+          "id": "a-success",
+          "choice": "a",
+          "outcome": "success",
+          "resultContains": {
+            "ko": "예상 순위표",
+            "en": "ranking"
+          }
+        },
+        {
+          "id": "a-failure",
+          "choice": "a",
+          "outcome": "failure",
+          "resultContains": {
+            "ko": "예상 순위표",
+            "en": "ranking"
+          }
+        },
+        {
+          "id": "b-success",
+          "choice": "b",
+          "outcome": "success",
+          "labelContains": {
+            "ko": "예상 순위표",
+            "en": "ranking"
+          },
+          "resultContains": {
+            "ko": "예상 순위표",
+            "en": "ranking"
+          }
+        },
+        {
+          "id": "b-failure",
+          "choice": "b",
+          "outcome": "failure",
+          "labelContains": {
+            "ko": "예상 순위표",
+            "en": "ranking"
+          },
+          "resultContains": {
+            "ko": "예상 순위표",
+            "en": "ranking"
+          }
+        },
+        {
+          "id": "c-only",
+          "choice": "c",
+          "outcome": "only",
+          "resultContains": {
+            "ko": "예상 순위표",
+            "en": "sheet"
+          }
+        }
+      ]
+    },
+    {
+      "id": "npc.rival.eden.03",
+      "fixture": {
+        "turn": 20,
+        "deck": 0,
+        "action": "rest.home",
+        "eventGold": 300,
+        "affinity": {
+          "eden": 60
+        },
+        "seenEvents": {
+          "npc.rival.eden.01": 4,
+          "npc.rival.eden.02": 12
+        },
+        "flags": {
+          "milestone:s1:pass": 1,
+          "milestone:s2:pass": 1
+        }
+      },
+      "bodyContains": {
+        "ko": "음료는 식은 차뿐이다",
+        "en": "only cold tea"
+      },
+      "cases": [
+        {
+          "id": "a-only",
+          "choice": "a",
+          "outcome": "only"
+        }
+      ]
+    },
+    {
+      "id": "npc.rival.eden.05",
+      "fixture": {
+        "turn": 30,
+        "deck": 0,
+        "action": "rest.home",
+        "eventGold": 300,
+        "stats": {
+          "starsense": 70
+        },
+        "affinity": {
+          "eden": 80
+        },
+        "seenEvents": {
+          "npc.rival.eden.01": 4,
+          "npc.rival.eden.02": 12,
+          "npc.rival.eden.03": 17,
+          "npc.rival.eden.04": 24
+        },
+        "flags": {
+          "milestone:s1:pass": 1,
+          "milestone:s2:pass": 1,
+          "milestone:s3:pass": 1
+        }
+      },
+      "bodyContains": {
+        "ko": "둘의 이름",
+        "en": "both our names"
+      },
+      "cases": [
+        {
+          "id": "b-only",
+          "choice": "b",
+          "outcome": "only",
+          "labelContains": {
+            "ko": "경쟁 말고",
+            "en": "No contest"
+          }
+        }
+      ]
+    },
+    {
+      "id": "opp.plague-ward",
+      "fixture": {
+        "turn": 12,
+        "deck": 0,
+        "action": "rest.home",
+        "eventGold": 150,
+        "stats": {
+          "stamina": 50
+        }
+      },
+      "cases": [
+        {
+          "id": "a-success",
+          "choice": "a",
+          "outcome": "success",
+          "resultContains": {
+            "ko": "깨끗한 이불",
+            "en": "clean blankets"
+          }
+        },
+        {
+          "id": "b-only",
+          "choice": "b",
+          "outcome": "only",
+          "labelContains": {
+            "ko": "식량과 이불",
+            "en": "food and blankets"
+          }
+        }
+      ]
+    },
+    {
+      "id": "opp.wager-table",
+      "fixture": {
+        "turn": 12,
+        "deck": 2,
+        "action": "rest.home",
+        "eventGold": 120,
+        "stats": {
+          "intellect": 50
+        }
+      },
+      "bodyContains": {
+        "ko": "사례금",
+        "en": "fee"
+      },
+      "cases": [
+        {
+          "id": "a-gold0-success",
+          "choice": "a",
+          "outcome": "success",
+          "eventGold": 0,
+          "labelContains": {
+            "ko": "관측 기록",
+            "en": "observations"
+          },
+          "resultContains": {
+            "ko": "사례금 200",
+            "en": "pay you 200 gold"
+          }
+        },
+        {
+          "id": "a-gold0-failure",
+          "choice": "a",
+          "outcome": "failure",
+          "eventGold": 0,
+          "resultContains": {
+            "ko": "사례금은 받지 못했지만",
+            "en": "earn no fee"
+          }
+        },
+        {
+          "id": "a-gold120-success",
+          "choice": "a",
+          "outcome": "success",
+          "eventGold": 120,
+          "resultContains": {
+            "ko": "사례금 200",
+            "en": "pay you 200 gold"
+          }
+        },
+        {
+          "id": "a-gold120-failure",
+          "choice": "a",
+          "outcome": "failure",
+          "eventGold": 120,
+          "resultContains": {
+            "ko": "사례금은 받지 못했지만",
+            "en": "earn no fee"
+          }
+        },
+        {
+          "id": "b-only",
+          "choice": "b",
+          "outcome": "only",
+          "labelContains": {
+            "ko": "겨울 준비",
+            "en": "prepare for winter"
+          },
+          "resultContains": {
+            "ko": "물품 목록",
+            "en": "supply lists"
+          }
+        },
+        {
+          "id": "c-only",
+          "choice": "c",
+          "outcome": "only",
+          "labelContains": {
+            "ko": "다음 일정",
+            "en": "next task"
+          },
+          "resultContains": {
+            "ko": "광장을 나서니",
+            "en": "leave the square"
+          }
+        }
+      ]
+    },
+    {
+      "id": "world.guild-dispute",
+      "fixture": {
+        "turn": 12,
+        "deck": 0,
+        "action": "rest.home",
+        "eventGold": 120
+      },
+      "cases": [
+        {
+          "id": "c-only",
+          "choice": "c",
+          "outcome": "only",
+          "resultContains": {
+            "ko": "식사를 대접",
+            "en": "a meal"
+          }
+        }
+      ]
+    }
+  ]
+}

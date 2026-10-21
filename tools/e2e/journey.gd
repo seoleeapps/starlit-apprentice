@@ -6,6 +6,7 @@ const FakeClock := preload("res://tools/e2e/fakes/clock.gd")
 const AdPolicyCases := preload("res://tools/e2e/ad_policy_cases.gd")
 const FakeAd := preload("res://tools/e2e/fakes/ad_adapter.gd")
 const TestStorage := preload("res://tools/e2e/fakes/storage.gd")
+const RatingEventFixture := preload("res://tools/e2e/fakes/rating_event_fixture.gd")
 
 var e2e: RefCounted
 var clock := FakeClock.new()
@@ -20,6 +21,7 @@ var month_count := 0
 var tuition_count := 0
 var _event_shot := false
 var _settlement_shot := false
+var _rating_fixture_records: Array = []
 
 func _initialize() -> void:
 	profile = root.get_node(^"Profile")
@@ -50,13 +52,15 @@ func _run() -> void:
 	await _pending_event_restore()
 	await _corrupt_save()
 	await _write_failure()
+	await _rating_event_copies()
 	if main != null and is_instance_valid(main):
 		await e2e.unmount(main)
 	var audio := root.get_node_or_null(^"Audio")
 	if audio != null:
 		audio.release()
 	var status: int = e2e.finish({"sourceSha": OS.get_environment("GITHUB_SHA"), "locale": locale,
-		"seed": 4242, "clockStart": 1792540800, "dataIsolation": "temporary-file-storage"})
+		"seed": 4242, "clockStart": 1792540800, "dataIsolation": "temporary-file-storage",
+		"ratingEventFixtures": _rating_fixture_records})
 	print("E2E %s: %s, events=%d, months=%d" % [locale, "PASS" if status == 0 else "FAIL", event_count, month_count])
 	e2e.viewport.queue_free()
 	await e2e.frames(3)
@@ -261,6 +265,135 @@ func _write_failure() -> void:
 		await _drain_results()
 	storage.set("fail_writes", false)
 	e2e.end()
+
+func _rating_event_copies() -> void:
+	# 앞의 9개 여정과 저장을 분리한다. 이후에는 합성 fixture의 실제 파일만 읽고 쓴다.
+	if main != null and is_instance_valid(main):
+		await e2e.unmount(main)
+		main = null
+	var original_storage := storage
+	var source := _rating_source_content()
+	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://tools/e2e/fixtures/rating-events.json"))
+	var builder := RatingEventFixture.new()
+	var save_dir := String(original_storage.get("_run_path")).get_base_dir()
+	for entry in (catalog.get("events", []) as Array):
+		var group: Dictionary = entry
+		var event_id := String(group.get("id", ""))
+		e2e.begin("rating-copy-%s-%s" % [event_id, locale], ["events", "localization", "save"])
+		for row in (group.get("cases", []) as Array):
+			var test_case: Dictionary = row
+			var case_id := "%s-%s" % [event_id.replace(".", "-"), String(test_case.get("id", ""))]
+			var fixture := builder.build(group, test_case, source)
+			if not e2e.step("%s: 실제 컨트롤러로 pending 저장 생성" % case_id, bool(fixture.get("ok", false)), String(fixture.get("reason", ""))):
+				continue
+			storage = TestStorage.new(save_dir.path_join("rating-%s-run.json" % case_id), save_dir.path_join("rating-%s-meta.json" % case_id))
+			profile.use_storage(storage)
+			profile.set_language(locale)
+			if not e2e.step("%s: 별도 파일에 fixture 저장" % case_id, profile.save_run(fixture["payload"])):
+				continue
+			_record_rating_fixture(case_id, event_id, test_case, fixture)
+			await _mount()
+			await _exercise_rating_copy(group, test_case, fixture, case_id)
+			await e2e.unmount(main)
+			main = null
+		e2e.end()
+	storage = original_storage
+	profile.use_storage(original_storage)
+
+func _exercise_rating_copy(group: Dictionary, test_case: Dictionary, fixture: Dictionary, case_id: String) -> void:
+	if not await _tap("resume"):
+		return
+	var pending: Array = _controller().pending_events
+	var event_id := String(group.get("id", ""))
+	var actual_id := String((pending[0] as Dictionary).get("id", "")) if not pending.is_empty() else ""
+	if not e2e.expect_equal("%s: 이어하기가 대상 이벤트를 먼저 표시" % case_id, actual_id, event_id):
+		return
+	var localized := SaLocalization.content({"events": [fixture["event"]]}, locale)
+	var event: Dictionary = (localized["events"] as Array)[0]
+	var choice_id := String(test_case.get("choice", ""))
+	var choice := _rating_find(event.get("choices", []), choice_id)
+	e2e.step("%s: 실제 이벤트 제목 표시" % case_id, _overlay_has_text(String(event.get("title", ""))))
+	e2e.step("%s: 실제 이벤트 본문 표시" % case_id, _overlay_has_text(String(event.get("body", ""))))
+	_rating_fragment(case_id + ": 본문 수정 문구", String(event.get("body", "")), group.get("bodyContains", {}))
+	var button := _find("event-choice:" + choice_id) as BaseButton
+	if not e2e.step("%s: 수정된 선택지를 실제로 누를 수 있음" % case_id, button != null and not button.disabled):
+		return
+	e2e.expect_equal("%s: 선택 문구 표시" % case_id, String(button.get("text")), String(choice.get("label", "")))
+	_rating_fragment(case_id + ": 선택 수정 문구", String(button.get("text")), test_case.get("labelContains", {}))
+	e2e.expect_equal("%s: 이벤트 직전 금화 fixture" % case_id, int(_controller().state.get("gold", -1)), int(fixture["eventGold"]))
+	await _shot("11-rating-%s-before" % case_id)
+	if not await _tap("event-choice:" + choice_id):
+		return
+	var outcome := _rating_find_kind(choice.get("outcomes", []), String(fixture["expectedKind"]))
+	e2e.step("%s: 선택 결과를 실제 화면에 표시" % case_id, not outcome.is_empty() and _overlay_has_text(String(outcome.get("result_text", ""))))
+	_rating_fragment(case_id + ": 결과 수정 문구", String(outcome.get("result_text", "")), test_case.get("resultContains", {}))
+	e2e.expect_equal("%s: 실제 선택 결과 금화" % case_id, int(_controller().state.get("gold", -1)), int(fixture["expectedGold"]))
+	e2e.expect_equal("%s: 실제 선택 결과 턴" % case_id, _controller().turn(), int(fixture["expectedTurn"]))
+	for stat in (fixture["expectedStats"] as Dictionary):
+		e2e.expect_equal("%s: 선택 결과 %s" % [case_id, stat], int((_controller().state.get("stats", {}) as Dictionary).get(stat, -1)), int(fixture["expectedStats"][stat]))
+	if event_id == "opp.wager-table" and choice_id == "a":
+		var fee := 200 if String(test_case.get("outcome", "")) == "success" else 0
+		e2e.expect_equal("%s: 참가비 없이 성공 사례금만 반영" % case_id, int(_controller().state.get("gold", -1)), int(fixture["eventGold"]) + fee)
+	e2e.expect_equal("%s: 선택 결과가 파일에 저장됨" % case_id, int((profile.load_run().get("state", {}) as Dictionary).get("gold", -1)), int(fixture["expectedGold"]))
+	await _shot("11-rating-%s-after" % case_id)
+	if not await _tap("continue"):
+		return
+	await _drain_results()
+	e2e.step("%s: 결과 확인 뒤 행동 화면으로 복귀" % case_id, not _all_with_prefix(main, "action-card:").is_empty())
+
+func _record_rating_fixture(case_id: String, event_id: String, test_case: Dictionary, fixture: Dictionary) -> void:
+	var folder := out.path_join("fixture-inputs")
+	DirAccess.make_dir_recursive_absolute(folder)
+	var path := folder.path_join(case_id + ".json")
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	if not e2e.step("%s: 합성 입력 fixture 근거 파일 열기" % case_id, file != null):
+		return
+	file.store_string(FileAccess.get_file_as_string(String(storage.get("_run_path"))))
+	file.flush()
+	var write_error := file.get_error()
+	file.close()
+	e2e.step("%s: 합성 입력 fixture 근거 저장" % case_id, write_error == OK)
+	_rating_fixture_records.append({"id": case_id, "sourceSha": OS.get_environment("GITHUB_SHA"),
+		"locale": locale, "eventId": event_id, "choiceId": test_case.get("choice", ""),
+		"expectedOutcome": fixture["expectedKind"], "seed": fixture["seed"], "seedAttempts": fixture["attempts"],
+		"eventGold": fixture["eventGold"], "input": "fixture-inputs/" + case_id + ".json", "sha256": FileAccess.get_sha256(path)})
+
+func _rating_source_content() -> Dictionary:
+	var source := {}
+	for key in ["actions", "events", "endings", "npcs"]:
+		var parsed: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/%s.json" % key))
+		source[key] = parsed.get(key, [])
+	return source
+
+func _rating_find(rows: Array, id: String) -> Dictionary:
+	for row in rows:
+		if String((row as Dictionary).get("id", "")) == id:
+			return row as Dictionary
+	return {}
+
+func _rating_find_kind(rows: Array, kind: String) -> Dictionary:
+	for row in rows:
+		if String((row as Dictionary).get("kind", "")) == kind:
+			return row as Dictionary
+	return {}
+
+func _rating_fragment(name: String, actual: String, markers: Dictionary) -> void:
+	if markers.has(locale):
+		e2e.step(name, actual.contains(String(markers[locale])), actual)
+
+func _overlay_has_text(expected: String) -> bool:
+	var overlay: Control = main.get("_overlay")
+	return not expected.is_empty() and is_instance_valid(overlay) and _node_has_text(overlay, expected)
+
+func _node_has_text(node: Node, expected: String) -> bool:
+	if node.is_queued_for_deletion():
+		return false
+	if node is Control and node.is_visible_in_tree() and (node is Label or node is Button) and String(node.get("text")) == expected:
+		return true
+	for child in node.get_children():
+		if _node_has_text(child, expected):
+			return true
+	return false
 
 func _play_one() -> bool:
 	var cards := _all_with_prefix(main, "action-card:")
