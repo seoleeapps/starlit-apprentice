@@ -75,8 +75,7 @@
         "autoload/profile.gd",
         "src/game/file_storage.gd",
         "src/game/run_controller.gd"
-      ],
-      "platformPaths": []
+      ]
     },
     {
       "id": "localization",
@@ -86,8 +85,7 @@
         "data/i18n/**",
         "autoload/profile.gd",
         "src/ui/**"
-      ],
-      "platformPaths": []
+      ]
     },
     {
       "id": "settings",
