@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Star Apprentice — Google Play feature graphic</title>
+<style>
+@font-face { font-family: Game; src: url('../../../assets/fonts/Pretendard-Regular.ttf'); }
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 1024px; height: 500px; overflow: hidden; background: #151a2c; }
+body { font-family: Game, sans-serif; color: #ffe4a2; position: relative; }
+.room { position: absolute; inset: 0; width: 1024px; height: 500px; object-fit: cover; object-position: center 41%; }
+.shade { position: absolute; inset: 0; background: linear-gradient(90deg, #111729f5 0%, #111729e6 35%, #111729a0 65%, #11172980 100%); }
+.star { position: absolute; left: 65px; top: 67px; font-size: 42px; color: #f3c65a; }
+h1 { position: absolute; margin: 0; left: 64px; top: 139px; font-size: 64px; line-height: 1.03; font-weight: 600; letter-spacing: -2px; text-shadow: 0 3px 12px #090d19; }
+.ko { position: absolute; left: 67px; top: 313px; margin: 0; font-size: 26px; letter-spacing: 2px; color: #e6d3b3; }
+.line { position: absolute; left: 67px; top: 368px; width: 85px; height: 2px; background: #d3ad59; }
+.apprentice { position: absolute; left: 364px; top: 49px; width: 405px; height: 405px; object-fit: contain; filter: drop-shadow(0 10px 18px #0008); }
+.screen { position: absolute; right: 59px; top: 40px; height: 420px; width: 236.25px; object-fit: contain; box-shadow: 0 8px 28px #0009; outline: 2px solid #d9bd7666; }
+</style>
+<img class="room" src="../../../assets/art/bg_room.webp" alt="">
+<div class="shade"></div>
+<div class="star">✦</div>
+<h1>Star<br>Apprentice</h1>
+<p class="ko" lang="ko">별빛 견습생</p><div class="line"></div>
+<img class="apprentice" src="../../../assets/art/apprentice.webp" alt="The apprentice">
+<img class="screen" src="../../screenshots/phone/en/02-action-scroll-720x1280.png" alt="Actual game screen">
+</html>

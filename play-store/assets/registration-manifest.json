@@ -1,0 +1,17 @@
+{
+  "out_dir": "play-store/assets",
+  "background": "#151a2c",
+  "brand": "실제 게임의 밤색 방과 견습생, 영어 행동 화면을 사용한다. 성장 선택 게임을 찾는 13세 이상 이용자가 대상이다. 짙은 남색과 금색, 기존 삽화 방향을 유지하며 타이틀과 실제 행동 화면으로 게임을 소개한다. 새 아트나 가상 화면은 만들지 않는다.",
+  "items": [
+    {
+      "id": "play-feature",
+      "kind": "feature-graphic",
+      "path": "feature-graphic-1024x500.png",
+      "width": 1024,
+      "height": 500,
+      "transparent": false,
+      "source": "play-store/assets/source/feature-graphic.html"
+    }
+  ],
+  "rules": [{"kind": "feature-graphic", "min": 1}]
+}

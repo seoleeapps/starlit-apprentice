@@ -7,5 +7,5 @@
     "android-template-v4.7.2.zip": "f7fdf644d50c0e231d8f02ae044057e489d0bcafcf50e908a4858477e7ee05ee"
   },
   "included": "GDScript and editor export support, Android ads/core with UMP; excludes mediation binaries, C#, sample, docs and iOS binaries",
-  "localPatch": "binary_installer skips disabled iOS; project Android-only, no automatic iOS download; Android bin ignore removed to commit pinned AARs; trailing whitespace normalized in gitignore and three internal files"
+  "localPatch": "binary_installer skips disabled iOS; project Android-only, no automatic iOS download; Android bin ignore removed to commit pinned AARs; trailing whitespace normalized in gitignore and three internal files; CSV translation import destinations corrected to the final addon path"
 }
