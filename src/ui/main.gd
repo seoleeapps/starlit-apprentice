@@ -18,6 +18,13 @@ var _overlay: Control
 var clock: Callable = func() -> int: return int(Time.get_unix_time_from_system())
 var seed_provider: Callable
 var ad_service: SaInterstitialService
+var age_adapter: SaAgeSignalsAdapter
+var age_access: SaAgeAccess
+var _age_overlay: Control
+var _age_status_label: Label
+var _age_retry_wrap: Control
+var _age_notice_dismissed := false
+var _services_ready := false
 var _locale := "en"
 var _last_save_ok := true
 var _ending_recorded := false
@@ -43,7 +50,26 @@ func _ready() -> void:
 	ad_service.persist = Profile.save_ad_state
 	ad_service.load_state(Profile.ad_state())
 	ad_service.configure(Profile.age_band())
+	if age_adapter == null:
+		age_adapter = SaAndroidAgeSignalsAdapter.new() if OS.get_name() == "Android" else SaAgeSignalsAdapter.new()
+	age_access = SaAgeAccess.new(age_adapter)
+	age_access.changed.connect(_render_age_access)
 	_show_title()
+	_services_ready = true
+	refresh_age_access()
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_RESUMED and _services_ready:
+		refresh_age_access()
+
+func _process(delta: float) -> void:
+	if age_access != null:
+		age_access.advance(delta)
+
+func refresh_age_access() -> void:
+	if age_access != null:
+		_age_notice_dismissed = false
+		age_access.refresh()
 
 func _load_content() -> Dictionary:
 	var out := {}
@@ -111,6 +137,12 @@ func _show_title() -> void:
 	col.add_child(_centered(_button(_tr("language") + ": " + ("한국어" if _locale == "ko" else "English"), "language", _change_language)))
 	col.add_child(_centered(_button(_tr("age") + ": " + _age_label(Profile.age_band()), "age", _show_age)))
 	col.add_child(_centered(_button(_tr("privacy"), "privacy", _privacy_options)))
+	_age_status_label = SaUiKit.label("", SaUiKit.FONT_SMALL, SaUiKit.INK_DIM)
+	_age_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_age_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	col.add_child(_age_status_label)
+	_age_retry_wrap = _centered(_button(_tr("age_access_retry"), "age-access:retry", refresh_age_access))
+	col.add_child(_age_retry_wrap)
 	var scroll := ScrollContainer.new()
 	scroll.set_anchors_preset(Control.PRESET_FULL_RECT)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -120,11 +152,14 @@ func _show_title() -> void:
 	scroll.add_child(col)
 	add_child(scroll)
 	Audio.play_bgm("bgm_main")
+	_render_age_access()
 
 func _sound_label() -> String:
 	return _tr("sound_on") if Audio.sound_enabled else _tr("sound_off")
 
 func _start_run() -> void:
+	if not _age_permits_game():
+		return
 	# 코어는 Time 을 모른다. 시드는 여기서 만들어 주입한다.
 	# 회차마다 다른 기회 덱을 연다. 덱 인덱스는 별빛 기록의 완주 회차에서
 	# 유도하므로 앱을 껐다 켜도 0 으로 되돌아가지 않는다.
@@ -135,6 +170,8 @@ func _start_run() -> void:
 	_show_turn()
 
 func _continue_run() -> void:
+	if not _age_permits_game():
+		return
 	if not _run.restore(Profile.load_run(), _content):
 		# 저장이 깨졌으면 조용히 새 런으로 떨어지지 않는다. 타이틀로 돌려보내
 		# 플레이어가 무엇을 시작하는지 알게 한다.
@@ -175,6 +212,8 @@ func _show_turn_base() -> void:
 	ad_service.activity()
 
 func _on_action(action: Dictionary, together: String) -> void:
+	if not _age_permits_game():
+		return
 	if _input_locked:
 		return
 	_input_locked = true
@@ -275,6 +314,8 @@ func _show_event() -> void:
 		col.add_child(btn)
 
 func _on_event_choice(choice: Dictionary) -> void:
+	if not _age_permits_game():
+		return
 	Audio.play_sfx("sfx_tap")
 	var outcome := _run.apply_event_choice(choice)
 	_save_run()
@@ -386,6 +427,8 @@ func _next_button(text: String, action: Callable) -> Control:
 	b.custom_minimum_size = Vector2(240, SaUiKit.TOUCH_MIN)
 	b.add_theme_font_size_override("font_size", SaUiKit.FONT_BODY)
 	b.pressed.connect(func():
+		if not _age_permits_game():
+			return
 		if _overlay != null and is_instance_valid(_overlay):
 			_overlay.hide()
 			_overlay.queue_free()
@@ -401,13 +444,22 @@ func _centered(node: Control) -> Control:
 
 func _clear() -> void:
 	for c in get_children():
+		if c == _age_overlay:
+			continue
 		if c is ColorRect and c.get_index() == 0:
 			continue
 		if c is Control:
 			(c as Control).hide()
 		c.queue_free()
 	_overlay = null
+	_age_status_label = null
+	_age_retry_wrap = null
 	_input_locked = false
+	_raise_age_overlay.call_deferred()
+
+func _raise_age_overlay() -> void:
+	if is_instance_valid(_age_overlay):
+		move_child(_age_overlay, -1)
 
 func _stat_name(key: String) -> String:
 	return SaLocalization.stat(key, _locale)
@@ -486,6 +538,8 @@ func _save_notice(col: VBoxContainer) -> void:
 	col.add_child(retry)
 
 func _finish_turn() -> void:
+	if not _age_permits_game():
+		return
 	var played := int(_run.last_result.get("played_turn", 0))
 	if not _run.is_over() and played > 0 and played % 3 == 0 and played != _boundary_turn:
 		_boundary_turn = played
@@ -494,5 +548,74 @@ func _finish_turn() -> void:
 		_show_turn()
 
 func _exit_tree() -> void:
+	if age_access != null:
+		age_access.release()
 	if ad_service != null:
 		ad_service.release()
+
+func _age_permits_game() -> bool:
+	if age_access == null or age_access.can_play():
+		return true
+	_age_notice_dismissed = false
+	_render_age_access()
+	return false
+
+func _render_age_access() -> void:
+	if age_access == null:
+		return
+	var blocked := not age_access.block_reason.is_empty()
+	if is_instance_valid(_age_status_label):
+		_age_status_label.text = _tr("age_access_" + age_access.block_reason) if blocked else ""
+		_age_status_label.visible = blocked and _age_notice_dismissed
+	if is_instance_valid(_age_retry_wrap):
+		_age_retry_wrap.visible = blocked and not age_access.checking and _age_notice_dismissed
+	if is_instance_valid(_age_overlay):
+		_age_overlay.hide()
+		_age_overlay.queue_free()
+		_age_overlay = null
+	if not age_access.checking and (not blocked or _age_notice_dismissed):
+		return
+	# 게임 이벤트와 별도의 겹침 화면이다. OS 확인 중에도 기존 선택과
+	# 결과 화면, 메모리의 진행 상태를 건드리지 않는다.
+	var scrim := ColorRect.new()
+	scrim.color = Color(0, 0, 0, 0.75)
+	scrim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	scrim.z_index = 100
+	add_child(scrim)
+	_age_overlay = scrim
+	var margin := MarginContainer.new()
+	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	for side in ["left", "top", "right", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 32)
+	scrim.add_child(margin)
+	var center := CenterContainer.new()
+	margin.add_child(center)
+	var card := PanelContainer.new()
+	card.custom_minimum_size = Vector2(minf(size.x - 64, 600), 0)
+	card.add_theme_stylebox_override("panel", SaUiKit.panel())
+	center.add_child(card)
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.custom_minimum_size = Vector2(0, minf(size.y - 128, 640))
+	card.add_child(scroll)
+	var col := VBoxContainer.new()
+	col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	col.add_theme_constant_override("separation", 20)
+	scroll.add_child(col)
+	var title := SaUiKit.heading(_tr("age_access_title"))
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	col.add_child(title)
+	var text := _tr("age_access_checking") if age_access.checking else _tr("age_access_" + age_access.block_reason)
+	var body := SaUiKit.label(text, SaUiKit.FONT_BODY)
+	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	col.add_child(body)
+	if age_access.checking:
+		_tag(body, "age-access:checking")
+	else:
+		var saved := SaUiKit.label(_tr("age_access_saved"), SaUiKit.FONT_SMALL, SaUiKit.INK_DIM)
+		saved.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		col.add_child(saved)
+		col.add_child(_button(_tr("age_access_retry"), "age-access:retry", refresh_age_access))
+		col.add_child(_button(_tr("close"), "age-access:close", func():
+			_age_notice_dismissed = true
+			_show_title()))

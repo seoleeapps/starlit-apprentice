@@ -15,6 +15,19 @@ ANDROID_NS = "http://schemas.android.com/apk/res/android"
 PACKAGE = "com.seorilabs.starlitapprentice"
 
 
+def check_age_sdk_classes(dex, metadata, errors):
+    required = {
+        "StarlitAgeSignals plugin": b"Lcom/seorilabs/starlit/agesignals/StarlitAgeSignals;",
+        "Play Age Signals factory": b"Lcom/google/android/play/agesignals/AgeSignalsManagerFactory;",
+        "Play Age Signals access request": b"Lcom/google/android/play/agesignals/AgeSignalsAccessRequest;",
+    }
+    for label, descriptor in required.items():
+        if descriptor not in dex:
+            errors.append(f"required {label} class missing from AAB")
+    if metadata.get("org.godotengine.plugin.v2.StarlitAgeSignals") != "com.seorilabs.starlit.agesignals.StarlitAgeSignals":
+        errors.append("Godot v2 Age Signals plugin entry missing from AAB manifest")
+
+
 def check_ad_sdk_classes(dex, errors):
     required = {
         "GMA Next-Gen MobileAds": b"Lcom/google/android/libraries/ads/mobile/sdk/MobileAds;",
@@ -139,6 +152,13 @@ def source_checks(root, errors):
         errors.append("Play listing must declare ads")
     if set(config["storeListing"]["appName"]) != {"ko-KR", "en-US"}:
         errors.append("Play listing must include Korean and English")
+    plugin = (root / "addons/starlit_age_signals/android_export.gd").read_text()
+    native_build = (root / "native/age_signals/build.gradle").read_text()
+    for label, source in (("Godot export", plugin), ("native library", native_build)):
+        if "com.google.android.play:age-signals:0.0.4" not in source:
+            errors.append(f"{label} must pin Play Age Signals 0.0.4")
+    if '"res://addons/starlit_age_signals/plugin.cfg"' not in (root / "project.godot").read_text():
+        errors.append("Godot Age Signals export plugin is not enabled")
     return {"packageName": PACKAGE, "minimumTargetSdk": 36, "sourceOnly": True}
 
 
@@ -196,6 +216,7 @@ def inspect_aab(path, args, errors):
         if not native:
             errors.append("Godot AAB has no native libraries to inspect")
         check_ad_sdk_classes(dex, errors)
+        check_age_sdk_classes(dex, metadata, errors)
         if b"com/google/firebase/" in dex or any(
                 "firebase" in str(attrs.get((ANDROID_NS, "name"), "")).lower() for _, attrs in manifest):
             errors.append("unexpected Firebase runtime dependency")

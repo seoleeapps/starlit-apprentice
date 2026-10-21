@@ -1283,5 +1283,12 @@
   "ui.need_gold": "Not enough gold",
   "ui.need_energy": "Not enough energy",
   "ui.locked": "This choice is not available yet",
-  "ui.save_corrupt": "The save could not be read. Existing files have been kept. Starting a new game will replace the previous run."
+  "ui.save_corrupt": "The save could not be read. Existing files have been kept. Starting a new game will replace the previous run.",
+  "ui.age_access_title": "Google Play age check",
+  "ui.age_access_checking": "Checking the age range and parent approval shared by Google Play.",
+  "ui.age_access_under13": "This game is for ages 13 and up. Google Play shared an age range under 13, so you cannot start or resume right now.",
+  "ui.age_access_approval_pending": "Parent approval is pending in Google Play. Please check again after approval.",
+  "ui.age_access_approval_denied": "Parent approval was declined in Google Play. Please review it with your parent, then check again.",
+  "ui.age_access_saved": "Your story progress and ending records stay saved on this device.",
+  "ui.age_access_retry": "Check again"
 }

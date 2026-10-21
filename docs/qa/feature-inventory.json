@@ -121,6 +121,27 @@
         "assets/audio/**",
         "src/ui/main.gd"
       ]
+    },
+    {
+      "id": "age-protection",
+      "core": false,
+      "foundation": true,
+      "paths": [
+        "src/game/age_access.gd",
+        "src/platform/age_signals_adapter.gd",
+        "src/platform/android_age_signals_adapter.gd",
+        "src/ui/main.gd",
+        "data/i18n/**",
+        "native/age_signals/**",
+        "addons/starlit_age_signals/**",
+        "scripts/build-age-signals.sh"
+      ],
+      "platformPaths": [
+        "src/platform/android_age_signals_adapter.gd",
+        "native/age_signals/**",
+        "addons/starlit_age_signals/**",
+        "scripts/build-age-signals.sh"
+      ]
     }
   ]
 }

@@ -12,4 +12,8 @@ Console에는 대략적 위치, 앱 상호작용, 진단, 기기 또는 기타 I
 
 앱 기능은 광고 동의나 광고 제공 없이도 사용할 수 있어 광고 데이터 수집은 선택 사항으로 신고한다. 앱에는 계정 생성과 계정 삭제 대상이 없다. Google 광고 식별자와 SDK 측 데이터 처리는 Google의 정책과 이용자 제어를 따르며, 기기 저장 삭제를 원격 SDK 데이터 삭제로 설명하지 않는다.
 
+Play Age Signals 0.0.4는 앱 시작과 재활성화 때 Google Play가 공유한 연령 범위와 보호자 승인 상태를 받는다. 앱 접근 보호에 필요한 상태만 메모리에서 사용하며 진행 저장, 수동 연령대, 광고 설정과 빈도 정책에는 넣지 않는다. 원시 응답, 설치 식별자와 승인 날짜는 읽거나 저장하지 않고 광고, 분석 또는 서버로 전송하지 않는다. [Google 이용 조건과 데이터 보안 안내](https://developer.android.com/google/play/age-signals/overview#terms-service)는 이 정보를 광고와 분석에 쓰지 못하도록 하며, Age Signals 클라이언트 라이브러리는 데이터를 수집하지 않는다고 설명한다. Play Store 자체 처리는 Google Play 약관을 따른다. 이 경로를 광고용 수동 연령 보호 신호와 혼동해 추가 수집으로 신고하지 않는다.
+
+0.0.4의 `NOT_SHARED`와 `VERIFICATION_REQUIRED`는 각각 미공유와 나이 확인 필요로 구분한다. 제공자 SDK가 지역 비적용 상태를 명시하지 않아 오류나 미공유를 비적용으로 추정하지 않는다. 수신이 없는 최초 실행은 기존 콘텐츠를 이용하며, 이미 확인된 13세 미만 또는 보호자 승인 대기와 거절은 오류 재시도만으로 해제하지 않는다. 확인 요청의 앱 내 대기는 5초이며, Play의 공유 선택 화면이나 SDK task를 강제로 종료하는 기능은 없다. 새 요청은 중복 실행하지 않는다.
+
 공개 개인정보처리방침은 [한국어](https://www.seorilabs.com/apps/starlit-apprentice/privacy/)와 [영어](https://www.seorilabs.com/en/apps/starlit-apprentice/privacy/)다. 최종 배포 전 같은 AAB에서 실제 SDK, Firebase 부재와 운영 광고 설정을 검사하고 실제 UMP와 광고 표시 검수는 별도 승인된 범위에서만 수행한다.

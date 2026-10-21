@@ -1283,5 +1283,12 @@
   "ui.need_gold": "골드가 부족하다",
   "ui.need_energy": "기력이 부족하다",
   "ui.locked": "아직 이 선택은 할 수 없다",
-  "ui.save_corrupt": "저장 데이터를 읽지 못했습니다. 기존 파일은 보존했습니다. 새로 시작하면 이전 진행을 덮어씁니다."
+  "ui.save_corrupt": "저장 데이터를 읽지 못했습니다. 기존 파일은 보존했습니다. 새로 시작하면 이전 진행을 덮어씁니다.",
+  "ui.age_access_title": "Google Play 연령 확인",
+  "ui.age_access_checking": "Google Play에서 공유한 연령과 보호자 승인 상태를 확인하고 있습니다.",
+  "ui.age_access_under13": "이 게임은 13세 이상 이용자를 대상으로 합니다. Google Play에서 공유한 연령이 13세 미만이라 지금은 시작하거나 이어할 수 없습니다.",
+  "ui.age_access_approval_pending": "Google Play에서 보호자 승인이 대기 중입니다. 승인을 마친 뒤 다시 확인해 주세요.",
+  "ui.age_access_approval_denied": "Google Play에서 보호자 승인이 거절된 상태입니다. 보호자와 승인 상태를 확인한 뒤 다시 확인해 주세요.",
+  "ui.age_access_saved": "진행 중인 이야기와 엔딩 기록은 기기에 그대로 보관됩니다.",
+  "ui.age_access_retry": "다시 확인"
 }

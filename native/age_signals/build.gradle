@@ -1,0 +1,44 @@
+plugins { id 'com.android.library' version '8.13.2' }
+
+android {
+    namespace 'com.seorilabs.starlit.agesignals'
+    compileSdk 36
+    defaultConfig {
+        minSdk 23
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    buildTypes { release { minifyEnabled false } }
+}
+
+dependencies {
+    compileOnly 'org.godotengine:godot:4.7.2.stable'
+    implementation 'com.google.android.play:age-signals:0.0.4'
+    testImplementation 'junit:junit:4.13.2'
+}
+
+dependencyLocking { lockAllConfigurations() }
+
+tasks.register('verifyAgeSignalsArtifact') {
+    doLast {
+        def sdk = configurations.releaseRuntimeClasspath.resolvedConfiguration.resolvedArtifacts.find {
+            it.moduleVersion.id.group == 'com.google.android.play' && it.name == 'age-signals'
+        }
+        if (sdk == null || sdk.moduleVersion.id.version != '0.0.4') {
+            throw new GradleException('Age Signals must resolve to 0.0.4')
+        }
+        def actual = java.security.MessageDigest.getInstance('SHA-256')
+            .digest(sdk.file.bytes).encodeHex().toString()
+        if (actual != '0f47c1dcef35feb637d879cd7fffff555a19398b850b2cc9814f61f54876e989') {
+            throw new GradleException('Age Signals 0.0.4 artifact checksum mismatch')
+        }
+    }
+}
+tasks.named('preBuild') { dependsOn 'verifyAgeSignalsArtifact' }
+tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}

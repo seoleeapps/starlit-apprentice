@@ -43,11 +43,12 @@
     "dataSafety": {
       "status": "saved-in-play-console-awaiting-review",
       "onDeviceData": "progress, ending collection, language, age bracket, consent state, interstitial policy counters",
-      "sdk": "Poing AdMob v5.1.0, Google Mobile Ads Next-Gen 1.4.0 and UMP; final AAB dependency inspection pending",
+      "sdk": "Poing AdMob v5.1.0, Google Mobile Ads Next-Gen 1.4.0, UMP and Play Age Signals 0.0.4; final AAB dependency inspection pending",
       "accountDeletion": "not-applicable-no-account-system",
       "privacyPolicyRequired": true,
       "evidence": "docs/privacy-and-data-safety.md",
-      "consoleStatus": "saved-preview-and-csv-readback-2026-10-21"
+      "consoleStatus": "saved-preview-and-csv-readback-2026-10-21",
+      "playAgeSignals": "Google Play age range and parent approval used only in memory for app access protection; no raw response, install ID, approval date, advertising or analytics use; no client-library collection per official SDK guidance"
     },
     "contentRating": "IARC saved; Korea GRAC all ages, Australia ACB General; final review pending",
     "targetAudience": "13-and-older; 13-15, 16-17, 18+ saved",

@@ -5,6 +5,8 @@ const Driver := preload("res://tools/e2e/e2e_driver.gd")
 const FakeClock := preload("res://tools/e2e/fakes/clock.gd")
 const AdPolicyCases := preload("res://tools/e2e/ad_policy_cases.gd")
 const FakeAd := preload("res://tools/e2e/fakes/ad_adapter.gd")
+const FakeAge := preload("res://tools/e2e/fakes/age_signals.gd")
+const AgeAccessCases := preload("res://tools/e2e/age_access_cases.gd")
 const TestStorage := preload("res://tools/e2e/fakes/storage.gd")
 const RatingEventFixture := preload("res://tools/e2e/fakes/rating_event_fixture.gd")
 
@@ -53,6 +55,7 @@ func _run() -> void:
 	await _corrupt_save()
 	await _write_failure()
 	await _rating_event_copies()
+	await AgeAccessCases.new().run(self)
 	if main != null and is_instance_valid(main):
 		await e2e.unmount(main)
 	var audio := root.get_node_or_null(^"Audio")
@@ -66,8 +69,9 @@ func _run() -> void:
 	await e2e.frames(3)
 	quit(status)
 
-func _mount() -> void:
+func _mount(age_override: SaAgeSignalsAdapter = null) -> void:
 	main = load("res://scenes/main.tscn").instantiate()
+	main.set("age_adapter", age_override if age_override != null else FakeAge.new())
 	main.set("clock", Callable(clock, "now"))
 	main.set("seed_provider", Callable(clock, "seed_value"))
 	ad = FakeAd.new()

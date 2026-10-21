@@ -43,6 +43,8 @@ case "$build_mode" in
   *) fail "SEORI_BUILD_MODE는 build-only 또는 production이어야 한다." ;;
 esac
 
+bash scripts/build-age-signals.sh 2>&1 | tee "$build_log_dir/age-signals-library.log"
+
 temporary_directory=""
 created_android_template=false
 had_android_gdignore=false
