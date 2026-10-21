@@ -15,6 +15,17 @@ ANDROID_NS = "http://schemas.android.com/apk/res/android"
 PACKAGE = "com.seorilabs.starlitapprentice"
 
 
+def check_ad_sdk_classes(dex, errors):
+    required = {
+        "GMA Next-Gen MobileAds": b"Lcom/google/android/libraries/ads/mobile/sdk/MobileAds;",
+        "GMA Next-Gen InterstitialAd": b"Lcom/google/android/libraries/ads/mobile/sdk/interstitial/InterstitialAd;",
+        "UMP UserMessagingPlatform": b"Lcom/google/android/ump/UserMessagingPlatform;",
+    }
+    for label, descriptor in required.items():
+        if descriptor not in dex:
+            errors.append(f"required {label} SDK class missing from AAB")
+
+
 def varint(data, offset):
     value = 0
     for shift in range(0, 70, 7):
@@ -184,9 +195,7 @@ def inspect_aab(path, args, errors):
                 runtime.extend(archive.read(name))
         if not native:
             errors.append("Godot AAB has no native libraries to inspect")
-        for sdk in (b"com/google/android/gms/ads/", b"com/google/android/ump/"):
-            if sdk not in dex:
-                errors.append("required AdMob or UMP SDK classes missing from AAB")
+        check_ad_sdk_classes(dex, errors)
         if b"com/google/firebase/" in dex or any(
                 "firebase" in str(attrs.get((ANDROID_NS, "name"), "")).lower() for _, attrs in manifest):
             errors.append("unexpected Firebase runtime dependency")
