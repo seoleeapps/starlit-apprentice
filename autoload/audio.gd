@@ -106,7 +106,8 @@ func play_sfx(id: String) -> void:
 ## dummy 오디오 드라이버는 playback 을 붙들어 종료 시 "resources still in use"
 ## 로 로그 게이트를 깨뜨린다. 배선 검증에는 스트림 배정이면 충분하다.
 func _can_play(player: AudioStreamPlayer) -> bool:
-	return player.is_inside_tree() and DisplayServer.get_name() != "headless"
+	return player.is_inside_tree() and DisplayServer.get_name() != "headless" \
+		and AudioServer.get_driver_name() != "Dummy"
 
 func _load_stream(id: String) -> AudioStream:
 	var path := AUDIO_DIR % id
