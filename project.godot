@@ -1,51 +1,34 @@
-; 별빛 견습생 (starlit-apprentice)
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
 ;
-; 주의: 기본 폰트를 여기에 지정하지 않는다.
-; 부팅 시점 폰트 로드가 첫 import 보다 앞서서 clean 체크아웃마다
-; "Cannot open file 'res://.godot/imported/....fontdata'" ERROR 를 남기고,
-; CI 로그 게이트가 이를 실패로 처리해 required check 가 영구히 red 가 된다.
-; autoload/ui.gd 가 import 이후에 부착한다. docs/02-decisions/0003 을 읽어라.
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
 
 config_version=5
+
+[admob]
+
+general/android/app_id=""
+general/ios/enabled=false
 
 [application]
 
 config/name="별빛 견습생"
-config/description="열두 달 동안 매주 하루를 골라 견습생을 길러 내는 한국어 육성 시뮬레이션"
-config/version="0.1.0"
+config/description="열두 달 동안 매주 열두 달 동안 견습생의 선택과 성장을 이끄는 육성 시뮬레이션"
+config/version="1.0.0"
 run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.7", "Mobile")
-config/icon="res://icon.svg"
 boot_splash/bg_color=Color(0.976471, 0.984314, 0.984314, 1)
-boot_splash/show_image=true
 boot_splash/image="res://assets/branding/seori-labs-boot-splash-1024.png"
-boot_splash/stretch_mode=1
-boot_splash/use_filter=true
-boot_splash/minimum_display_time=0
+config/icon="res://icon.svg"
 
 [autoload]
 
-Events="*res://autoload/events.gd"
 Ui="*res://autoload/ui.gd"
-GameData="*res://autoload/game_data.gd"
-Platform="*res://autoload/platform.gd"
 Profile="*res://autoload/profile.gd"
 Audio="*res://autoload/audio.gd"
-Analytics="*res://autoload/analytics.gd"
-
-[importer_defaults]
-
-; Godot 기본 텍스처 import 는 원본을 자체 .ctex 로 재인코딩해 WebP 압축을 버린다.
-; 실측: WebP 소스 0.48MB 가 .ctex 2.57MB 로 부풀었다.
-; compress/mode=1 (Lossy) 이 WebP 압축을 pck 까지 유지한다.
-; 평면 벡터 아트라 lossy_quality 0.9 에서 눈에 띄는 열화가 없다.
-; docs/02-decisions/0008-texture-import-mode.md
-texture={
-"compress/mode": 1,
-"compress/lossy_quality": 0.9,
-"compress/hdr_compression": 0,
-"mipmaps/generate": false
-}
 
 [display]
 
@@ -54,6 +37,19 @@ window/size/viewport_height=1280
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=1
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/admob/plugin.cfg")
+
+[importer_defaults]
+
+texture={
+"compress/hdr_compression": 0,
+"compress/lossy_quality": 0.9,
+"compress/mode": 1,
+"mipmaps/generate": false
+}
 
 [input_devices]
 

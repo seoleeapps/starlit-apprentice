@@ -4,16 +4,16 @@
 
 ## 상태
 
-**재작성 중.** 기존 웹 클라이언트를 Godot 4로 다시 만들고 코어 루프를 재설계하고 있다.
+**Android 출시 준비 중.** 개발 실행, 네이티브 광고 검수, 빌드, 업로드, 심사와 공개는 별도 상태다. [현재 출시 원장](docs/06-release/2026-10-21-android-launch.md)을 확인한다.
 설계는 [`docs/game-design/`](docs/game-design/)이 원장이고, 진행 단계는 [`docs/04-work/`](docs/04-work/)에 기록한다.
 
 | | |
 |---|---|
 | 엔진 | Godot `4.7.2.stable` |
 | 화면 | 세로 고정 720×1280 |
-| 출시 타깃 | Google Play · Apple App Store · AppsInToss |
-| 언어 | 한국어 (i18n 구조 선반영) |
-| 백엔드 | Firebase + GA4 (로컬 저장, 서버 권위 없음) |
+| 출시 타깃 | 이번 출시 Google Play (기존 iOS, AppsInToss export 설정은 보존) |
+| 언어 | 한국어, 영어 |
+| 백엔드 | 서버 없음. 기기 로컬 저장 |
 
 ## 구조
 
@@ -23,7 +23,7 @@ autoload/                Godot 싱글턴. 어댑터 조립 지점
 src/                     런타임 — platform(어댑터) · ui · game · content · audio
 data/                    콘텐츠 원장 (actions · events · endings · npcs · route_plans)
 apps/ait/                AppsInToss 래퍼 (Godot Web export 패키징)
-firebase/  play-store/  app-store/  apps-in-toss/   마켓·백엔드 설정
+play-store/  app-store/  apps-in-toss/   마켓 설정
 docs/                    실행 원장 (9폴더 + game-design 설계 팩)
 scripts/  tools/         게이트와 빌드 스크립트
 ```
@@ -40,10 +40,10 @@ bash scripts/check_docs.sh .               # 문서 구조
 bash scripts/check_web_budget.sh .         # Web 전송 예산 (export 후)
 ```
 
-전체 스위트가 5초 안에 돈다. `rm -rf .godot` 후 **1회차**가 깨끗해야 한다 — 2회차는 증거가 아니다.
+실행 시간은 전체 E2E와 렌더링을 포함하면 환경에 따라 달라진다. `rm -rf .godot` 후 **1회차**가 깨끗해야 한다 — 2회차는 증거가 아니다.
 
 ## 경계
 
 - 로그인·서버 세이브·인앱 결제 없음. 저장은 기기 로컬 1슬롯이다.
-- 광고는 Android/iOS 한정이며 진행을 막지 않는다. AppsInToss 웹 빌드는 광고를 싣지 않는다.
+- 이번 출시의 광고는 Android 전면광고만이다. 월말의 모든 결과와 저장을 확인한 경계에서 준비된 광고만 표시한다. 미성년 제한, UMP 동의와 로컬 상한을 적용한다.
 - 기존 IP의 이름·캐릭터·UI·이벤트·엔딩을 직접 복제하지 않는다.

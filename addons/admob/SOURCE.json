@@ -1,0 +1,11 @@
+{
+  "version": "5.1.0",
+  "release": "https://github.com/poingstudios/godot-admob-plugin/releases/tag/v5.1.0",
+  "godot": "4.7.2",
+  "archives": {
+    "poing-godot-admob-v5.1.0.zip": "8c53ff52719edf6a81cc7d32a9cdaad2d9e11693c85faca25008a1c19355726f",
+    "android-template-v4.7.2.zip": "f7fdf644d50c0e231d8f02ae044057e489d0bcafcf50e908a4858477e7ee05ee"
+  },
+  "included": "GDScript and editor export support, Android ads/core with UMP; excludes mediation binaries, C#, sample, docs and iOS binaries",
+  "localPatch": "binary_installer skips disabled iOS; project Android-only, no automatic iOS download; Android bin ignore removed to commit pinned AARs; trailing whitespace normalized in gitignore and three internal files"
+}

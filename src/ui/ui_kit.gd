@@ -43,6 +43,7 @@ static func panel(bg: Color = BG_PANEL, radius: int = 14) -> StyleBoxFlat:
 
 static func label(text: String, size: int = FONT_BODY, color: Color = INK) -> Label:
 	var l := Label.new()
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	l.text = text
 	l.add_theme_font_size_override("font_size", size)
 	l.add_theme_color_override("font_color", color)

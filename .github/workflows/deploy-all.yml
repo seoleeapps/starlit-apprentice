@@ -1,0 +1,25 @@
+name: Deploy All
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 출시 태그. 현재 승인된 마켓은 Google Play
+        type: string
+        required: true
+
+permissions:
+  contents: read
+  actions: read
+  id-token: write
+
+jobs:
+  google-play:
+    uses: ./.github/workflows/deploy-google-play.yml
+    with:
+      release_tag: ${{ inputs.release_tag }}
+      upload: true
+    secrets:
+      GOOGLE_PLAY_UPLOAD_KEYSTORE_BASE64: ${{ secrets.GOOGLE_PLAY_UPLOAD_KEYSTORE_BASE64 }}
+      GOOGLE_PLAY_UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.GOOGLE_PLAY_UPLOAD_KEYSTORE_PASSWORD }}
+      GOOGLE_PLAY_UPLOAD_KEY_PASSWORD: ${{ secrets.GOOGLE_PLAY_UPLOAD_KEY_PASSWORD }}

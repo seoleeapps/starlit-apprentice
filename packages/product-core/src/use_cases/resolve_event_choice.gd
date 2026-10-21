@@ -124,12 +124,12 @@ static func pick(state: Dictionary, events: Array, rng: SaRng) -> Dictionary:
 ## 재플레이 콘텐츠를 광고하기 위해서다.
 static func choice_availability(state: Dictionary, choice: Dictionary) -> Dictionary:
 	if not SaEventRequirements.all_satisfied(state, choice.get("requirements", [])):
-		return {"ok": false, "reason": _text(choice.get("locked_reason", "아직 이 선택은 할 수 없다"))}
+		return {"ok": false, "reason_code": "requirements", "reason": _text(choice.get("locked_reason", "아직 이 선택은 할 수 없다"))}
 	var cost: Dictionary = choice.get("cost", {})
 	if int(state.get("gold", 0)) + int(cost.get("gold", 0)) < 0:
-		return {"ok": false, "reason": "골드가 부족하다"}
+		return {"ok": false, "reason_code": "gold", "reason": "골드가 부족하다"}
 	if int(state.get("energy", 0)) + int(cost.get("energy", 0)) < 0:
-		return {"ok": false, "reason": "기력이 부족하다"}
+		return {"ok": false, "reason_code": "energy", "reason": "기력이 부족하다"}
 	return {"ok": true, "reason": ""}
 
 ## 선택지 판정 성공 확률. 스탯 대비 난이도 + NPC 호감 보정.

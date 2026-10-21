@@ -1,0 +1,21 @@
+name: Check Web Budget
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-budget-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    uses: seorilabs/.github/.github/workflows/godot-checks.yml@main
+    with:
+      runs_on: ubuntu-latest
+      godot_version: "4.7.2"
+      godot_status: stable
+      with_export_templates: true
+      check_command: bash scripts/check_web_budget.sh .

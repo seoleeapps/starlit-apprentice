@@ -1,3 +1,5 @@
+> 2026-10-21: Android 출시 범위는 [로컬 전용 승인 설계](../design/2026-10-21-android-launch/design.md)가 우선한다. 아래 서버와 분석 전송, 보상형 광고 계획은 과거 설계이며 현재 런타임에 포함되지 않는다.
+
 # ADR-0005 GA4 Measurement Protocol Web 스트림의 구조적 한계를 수용한다
 
 - 상태: `accepted`

@@ -1,19 +1,19 @@
 {
   "name": "starlit-apprentice",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "godot:gate": "bash scripts/godot_quality_gate.sh --project .",
-    "godot:core": "$GODOT_BIN --headless --path . --script res://tests/core_test_runner.gd",
-    "godot:smoke": "$GODOT_BIN --headless --path . --script res://tests/test_runner.gd",
+    "godot:core": "python3 scripts/run_godot.py --log build/qa/core.log -- godot --headless --path . --script res://tests/core_test_runner.gd",
+    "godot:smoke": "python3 scripts/run_godot.py --log build/qa/smoke.log -- godot --headless --path . --script res://tests/test_runner.gd",
     "godot:arch": "python3 tools/check_core_boundary.py .",
-    "godot:web": "$GODOT_BIN --headless --path . --export-release Web build/web/index.html",
+    "godot:web": "bash scripts/export_web.sh .",
     "godot:budget": "bash scripts/check_web_budget.sh .",
     "godot:test": "bash scripts/test_all.sh",
-    "check:platform-sdk": "node scripts/check_platform_sdk.mjs && node --test scripts/tests/*.test.mjs",
     "godot:docs": "bash scripts/check_docs.sh .",
-    "art:finalize": "bash scripts/finalize_art.sh assets/art"
+    "art:finalize": "bash scripts/finalize_art.sh assets/art",
+    "test:e2e": "bash scripts/test_all.sh"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.1",

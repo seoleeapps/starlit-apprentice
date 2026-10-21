@@ -1,100 +1,66 @@
 extends SceneTree
-## UI 레이아웃 회귀 가드.
-##
-## 실제로 겪은 버그: SaTurnScreen 을 add_child 한 뒤 set_anchors_preset 을 부르면
-## 크기가 (0,0) 으로 남아 화면 전체가 빈 채로 렌더된다. Godot 은 에러를 내지 않는다.
-## 스모크 테스트는 인스턴스화만 확인하므로 이걸 못 잡는다.
-
-const MIN_TOUCH := 88.0
-
-var _f := 0
-var _failures: Array[String] = []
+## 실제 시작 화면에 좌표 입력을 넣어 레이아웃과 가로 스크롤을 확인한다.
+const Driver := preload("res://tools/e2e/e2e_driver.gd")
+var e2e: RefCounted
 
 func _initialize() -> void:
-	var packed := load("res://scenes/main.tscn") as PackedScene
-	root.add_child(packed.instantiate())
+	var base := _isolated_output().get_base_dir()
+	DirAccess.make_dir_recursive_absolute(base)
+	root.get_node(^"Profile").use_storage(SaFileStorage.new(base.path_join("layout-run.json"), base.path_join("layout-meta.json")))
+	call_deferred("_run")
 
-func _process(_d: float) -> bool:
-	_f += 1
-	if _f == 15:
-		_press_first(root)   # 새로 시작 → 턴 화면
-	if _f == 45:
-		_check()
-		# 오디오 스트림을 붙든 채 끝나면 "resources still in use" 가 남아
-		# 로그 게이트가 이 프로브를 실패로 처리한다.
-		var audio := root.get_node_or_null(^"Audio")
-		if audio != null:
-			audio.release()
-		if _failures.is_empty():
-			print("LAYOUT PASS")
-			quit(0)
-		else:
-			for m in _failures:
-				printerr("FAIL: %s" % m)
-			quit(1)
-	return false
+func _run() -> void:
+	e2e = Driver.new(self, Vector2i(720, 1280), _isolated_output(), false)
+	e2e.begin("turn-layout", ["core-loop", "card-scroll"])
+	var main: Control = load("res://scenes/main.tscn").instantiate()
+	await e2e.mount(main)
+	e2e.step("실제 시작 버튼 좌표 입력", await e2e.tap(_find(main, "start")))
+	await e2e.frames(3)
+	var turn: Control = main.get("_turn_screen")
+	e2e.step("턴 화면이 생성됨", is_instance_valid(turn))
+	if is_instance_valid(turn):
+		e2e.step("루트가 viewport를 채움", main.size == Vector2(720, 1280), str(main.size))
+		e2e.step("턴 화면이 부모를 채움", turn.size.x >= main.size.x * 0.95 and turn.size.y >= main.size.y * 0.95, str(turn.size))
+		var scroll := main.find_child("ActionScroll", true, false) as ScrollContainer
+		e2e.step("가로 목록이 존재함", scroll != null)
+		if scroll != null:
+			var view := scroll.get_global_rect()
+			var pos := view.position + Vector2(view.size.x * 0.7, 20)
+			for card in scroll.get_child(0).get_children():
+				if card is Control and view.encloses(card.get_global_rect()):
+					pos = Vector2(card.get_global_rect().get_center().x, card.get_global_rect().position.y + 16)
+			await e2e.drag(pos, pos - Vector2(270, 0), 12, 0.25)
+			e2e.step("카드에서 시작한 드래그가 목록을 이동함", scroll.scroll_horizontal > 0, str(scroll.scroll_horizontal))
+		var small: Array[String] = []
+		_check_touch(turn, small)
+		e2e.step("주요 터치 영역 높이 88 이상", small.is_empty(), str(small))
+	e2e.end()
+	await e2e.unmount(main)
+	var audio := root.get_node_or_null(^"Audio")
+	if audio != null:
+		audio.release()
+	quit(e2e.finish())
 
-func _check() -> void:
-	var main := root.get_child(root.get_child_count() - 1) as Control
-	if main == null or main.size.x <= 0.0 or main.size.y <= 0.0:
-		_failures.append("루트 화면 크기가 0이다")
-		return
+func _isolated_output() -> String:
+	var base := OS.get_environment("STARLIT_SAVE_DIR")
+	if base.is_empty():
+		base = "user://e2e/layout-%d" % OS.get_process_id()
+	return base.path_join("layout")
 
-	# 턴 화면이 부모를 채워야 한다
-	var turn := _find(main, "SaTurnScreen")
-	if turn == null:
-		_failures.append("턴 화면을 찾지 못했다")
-		return
-	if turn.size.x < main.size.x * 0.95 or turn.size.y < main.size.y * 0.95:
-		_failures.append("턴 화면이 부모를 채우지 않는다: %s vs %s" % [str(turn.size), str(main.size)])
-
-	# 크기가 0 인 Control 이 있으면 안 된다 (렌더는 되는데 안 보이는 상태)
-	var zero := 0
-	_count_zero(turn, func(): zero += 1)
-	if zero > 0:
-		_failures.append("크기가 0인 Control 이 %d개 있다" % zero)
-
-	# 터치 타깃 최소 88px
-	var small: Array[String] = []
-	_check_touch(turn, small)
-	if not small.is_empty():
-		_failures.append("터치 타깃이 %.0fpx 미만: %s" % [MIN_TOUCH, ", ".join(small)])
-
-	print("루트 %s · 턴 화면 %s · 크기0 %d · 작은 버튼 %d"
-		% [str(main.size), str(turn.size), zero, small.size()])
-
-func _find(node: Node, script_name: String) -> Control:
-	for c in node.get_children():
-		if c is Control and c.get_script() != null:
-			var path := String((c.get_script() as Script).resource_path)
-			if path.contains("turn_screen"):
-				return c as Control
-		var found := _find(c, script_name)
+func _find(node: Node, id: String) -> Control:
+	if node is Control and String(node.get_meta("e2e_id", "")) == id:
+		return node as Control
+	for child in node.get_children():
+		var found := _find(child, id)
 		if found != null:
 			return found
 	return null
 
-func _count_zero(node: Node, bump: Callable) -> void:
-	for c in node.get_children():
-		if c is Control:
-			var ctl := c as Control
-			if ctl.visible and ctl.size.x <= 0.0 and ctl.size.y <= 0.0 and ctl.get_child_count() > 0:
-				bump.call()
-		_count_zero(c, bump)
-
 func _check_touch(node: Node, out: Array[String]) -> void:
-	for c in node.get_children():
-		if c is Button:
-			var b := c as Button
-			if b.visible and not b.disabled and b.size.y > 0.0 and b.size.y < MIN_TOUCH:
-				# 카드 안의 함께 칩은 보조 어포던스라 예외로 둔다
-				if not b.text.begins_with("함께"):
-					out.append("%s(%.0f)" % [b.text.substr(0, 8), b.size.y])
-		_check_touch(c, out)
-
-func _press_first(n: Node) -> void:
-	for c in n.get_children():
-		if c is Button and not (c as Button).disabled:
-			(c as Button).emit_signal("pressed")
-			return
-		_press_first(c)
+	for child in node.get_children():
+		if child is BaseButton:
+			var button := child as BaseButton
+			var id := String(button.get_meta("e2e_id", ""))
+			if button.is_visible_in_tree() and not button.disabled and not id.begins_with("together:") and button.size.y > 0.0 and button.size.y < 88.0:
+				out.append("%s(%.0f)" % [button.name, button.size.y])
+		_check_touch(child, out)

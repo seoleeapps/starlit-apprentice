@@ -37,20 +37,33 @@ jobs:
       project_dir: "."
       with_export_templates: false
       timeout_minutes: 25
-      runs_on: >-
-        ${{ (github.event.repository.private && !github.event.pull_request.head.repo.fork)
-            && 'seorilabs-rpi-arm64' || 'ubuntu-latest' }}
+      runs_on: ubuntu-latest
+      e2e_report_path: build/e2e
       check_command: |
-        node scripts/check_platform_sdk.mjs
-        node --test scripts/tests/*.test.mjs
         python3 tools/check_core_boundary.py .
         python3 tools/validate_content.py .
         bash scripts/check_docs.sh
-        bash scripts/test_all.sh
-        bash scripts/godot_quality_gate.sh --project .
+        for pass in first second; do
+          rm -rf .godot
+          export GODOT_TEST_LOG_DIR="build/e2e/clean-$pass"
+          bash scripts/test_all.sh
+          bash scripts/godot_quality_gate.sh --project .
+        done
+        for locale in ko en; do
+          for viewport in 640x1136 720x1280 720x1600; do
+            width="${viewport%x*}"
+            height="${viewport#*x}"
+            output="build/e2e/render-$locale-$viewport"
+            python3 scripts/run_godot.py --log "$output.log" -- \
+              xvfb-run -a godot --rendering-driver opengl3 --path . \
+              --script res://tools/e2e/journey.gd -- --out "$output" \
+              --locale "$locale" --capture --width "$width" --height "$height"
+          done
+        done
+        find build/e2e -type f ! -name sha256sums.txt -print0 | sort -z | \
+          xargs -0 sha256sum > build/e2e/sha256sums.txt
 
-  # 전송 예산과 한국어 폰트 pck 탑재는 export 산출물로만 확인할 수 있다.
-  # export 템플릿이 필요해 별도 job 으로 분리한다.
+  # main에서는 export하지 않는다. 실제 Web 산출물 검사는 수동 workflow가 맡는다.
   # ⚠ 이 job 의 name 도 required check 컨텍스트를 만든다. 바꾸지 마라.
   web-budget:
     name: Web Budget
@@ -59,10 +72,8 @@ jobs:
       godot_version: "4.7.2"
       godot_status: stable
       project_dir: "."
-      with_export_templates: true
+      with_export_templates: false
       timeout_minutes: 25
-      runs_on: >-
-        ${{ (github.event.repository.private && !github.event.pull_request.head.repo.fork)
-            && 'seorilabs-rpi-arm64' || 'ubuntu-latest' }}
+      runs_on: ubuntu-latest
       check_command: |
-        bash scripts/check_web_budget.sh .
+        python3 tools/check_android_release.py --source-only

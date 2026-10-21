@@ -14,6 +14,7 @@ signal portrait_tapped
 
 const ART := "res://assets/art/%s.webp"
 
+var _locale := "en"
 var _run: SaRunController
 var _scene_layer: Control
 var _band: HBoxContainer
@@ -23,7 +24,8 @@ var _figure: TextureRect
 var _bg: TextureRect
 var _together_pick: String = ""
 
-func setup(run: SaRunController) -> void:
+func setup(run: SaRunController, locale: String = "en") -> void:
+	_locale = locale
 	_run = run
 	_stretch(self, 0.0, 0.0, 1.0, 1.0)
 	_build()
@@ -77,6 +79,7 @@ func _build() -> void:
 	add_child(band_wrap)
 
 	var scroll := ScrollContainer.new()
+	scroll.name = "ActionScroll"
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	band_wrap.add_child(scroll)
@@ -90,7 +93,7 @@ func _build() -> void:
 func refresh() -> void:
 	# 컨디션은 성장 배율을 직접 바꾼다. 초상 표정만으로는 배율이 붙는다는
 	# 사실을 알 수 없어 명패에 함께 적는다.
-	_nameplate.text = "%d월 %s · %s" % [_run.month(), _run.phase_label(), _run.condition_label()]
+	_nameplate.text = (SaLocalization.text("ui.month_phase", _locale) % [_run.month(), SaLocalization.phase((_run.turn() - 1) % 3, _locale)]) + " — " + SaLocalization.condition(SaRisk.current_condition_key(_run.state.get("conditions", []), int(_run.state.get("stress", 0))), _locale)
 	_bg.texture = _tex(_run.scene_art())
 	_figure.texture = _tex(_run.apprentice_art())
 	_rebuild_pips()
@@ -105,6 +108,7 @@ func _rebuild_pips() -> void:
 	_pips.add_child(_pip("token_mind", 100 - int(s.get("stress", 0))))
 	# 초상은 마음의 1차 표시이자 스탯 시트 진입점이다
 	var portrait := TextureButton.new()
+	portrait.set_meta("e2e_id", "portrait")
 	portrait.texture_normal = _tex(_run.apprentice_art())
 	portrait.ignore_texture_size = true
 	portrait.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
@@ -137,7 +141,10 @@ func _rebuild_band() -> void:
 ## 카드당 숫자는 최대 2개다. 주 스탯 델타와 기력 비용.
 func _card(action: Dictionary) -> Control:
 	var btn := Button.new()
-	btn.custom_minimum_size = Vector2(176, 196)
+	btn.mouse_filter = Control.MOUSE_FILTER_PASS
+	btn.set_meta("e2e_id", "action-card:" + String(action.get("id", "")))
+	btn.set_meta("action_id", String(action.get("id", "")))
+	btn.custom_minimum_size = Vector2(176, 328)
 	btn.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	btn.add_theme_stylebox_override("normal", SaUiKit.panel(SaUiKit.BG_PANEL.lightened(0.05)))
 	btn.add_theme_stylebox_override("hover", SaUiKit.panel(SaUiKit.BG_PANEL.lightened(0.08)))
@@ -153,6 +160,7 @@ func _card(action: Dictionary) -> Control:
 	col.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	var icon := TextureRect.new()
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	icon.texture = _tex(String(action.get("icon", "")))
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -160,16 +168,19 @@ func _card(action: Dictionary) -> Control:
 	col.add_child(icon)
 
 	var title := SaUiKit.label(String(action.get("label", "")), SaUiKit.FONT_BODY, SaUiKit.GOLD)
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	col.add_child(title)
 
 	var place := SaUiKit.label(String(action.get("place", "")), SaUiKit.FONT_MIN, SaUiKit.INK_DIM)
+	place.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	place.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	col.add_child(place)
 
-	var nums := HBoxContainer.new()
+	var nums := VBoxContainer.new()
+	nums.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	nums.alignment = BoxContainer.ALIGNMENT_CENTER
-	nums.add_theme_constant_override("separation", 12)
+	nums.add_theme_constant_override("separation", 2)
 	var stat: Variant = action.get("stat")
 	if stat != null:
 		var gain := SaGrowthCurve.gain(
@@ -180,14 +191,17 @@ func _card(action: Dictionary) -> Control:
 			SaUiKit.FONT_SMALL, SaUiKit.TEAL))
 	var energy := int((action.get("cost", {}) as Dictionary).get("energy", 0))
 	if energy != 0:
-		nums.add_child(SaUiKit.label("기력 %s" % SaUiKit.format_delta(energy),
+		nums.add_child(SaUiKit.label(SaLocalization.text("ui.energy", _locale) % SaUiKit.format_delta(energy),
 			SaUiKit.FONT_SMALL, SaUiKit.delta_color(energy)))
 	col.add_child(nums)
 
 	var together: String = _run.together_candidate(action)
 	if together != "":
 		var chip := Button.new()
-		chip.text = "함께 · %s" % _npc_name(together)
+		chip.mouse_filter = Control.MOUSE_FILTER_PASS
+		chip.set_meta("e2e_id", "together:" + together)
+		chip.text = SaLocalization.text("ui.together", _locale) % _npc_name(together)
+		chip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		chip.add_theme_font_size_override("font_size", SaUiKit.FONT_MIN)
 		chip.toggle_mode = true
 		chip.custom_minimum_size = Vector2(0, 40)
@@ -195,7 +209,9 @@ func _card(action: Dictionary) -> Control:
 		col.add_child(chip)
 
 	btn.add_child(col)
-	btn.pressed.connect(func(): action_chosen.emit(action, _together_pick))
+	btn.pressed.connect(func():
+		btn.disabled = true
+		action_chosen.emit(action, _together_pick))
 	return btn
 
 ## 앵커를 명시하고 offset 을 0 으로 둔다. 프리셋과 앵커 오버라이드를 섞으면
@@ -218,9 +234,7 @@ func _tex(name: String) -> Texture2D:
 	return load(path) if ResourceLoader.exists(path) else null
 
 func _stat_name(key: String) -> String:
-	return {"intellect":"지성","sensibility":"감성","etiquette":"예법","craft":"손재주",
-		"stamina":"체력","starsense":"별감응","courage":"담력","eloquence":"언변",
-		"commerce":"상재"}.get(key, key)
+	return SaLocalization.stat(key, _locale)
 
 func _npc_name(id: String) -> String:
 	return _run.npc_name(id)

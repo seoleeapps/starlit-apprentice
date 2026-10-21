@@ -4,8 +4,8 @@ extends SceneTree
 ## 소리는 헤드리스에서 들을 수 없다. 들리는지가 아니라 배선이 살아 있는지를
 ## 검증한다 — 버스 분리, 같은 곡 재요청, 겹침 재생, 설정 지속, 앱 전환 복원.
 
-const META_PATH := "user://test_audio_meta.json"
-const RUN_PATH := "user://test_audio_run.json"
+var META_PATH := _test_path("audio-meta.json")
+var RUN_PATH := _test_path("audio-run.json")
 
 func _initialize() -> void:
 	var failures: Array[String] = []
@@ -148,3 +148,10 @@ func _cleanup() -> void:
 		RUN_PATH, RUN_PATH + ".bak", RUN_PATH + ".tmp"]:
 		if FileAccess.file_exists(p):
 			DirAccess.remove_absolute(p)
+
+func _test_path(file_name: String) -> String:
+	var base := OS.get_environment("STARLIT_SAVE_DIR")
+	if base.is_empty():
+		base = "user://tests/%d" % OS.get_process_id()
+	DirAccess.make_dir_recursive_absolute(base)
+	return base.path_join(file_name)

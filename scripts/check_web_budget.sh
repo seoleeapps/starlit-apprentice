@@ -16,7 +16,7 @@ godot_bin="${GODOT_BIN:-godot}"
 
 # AppsInToss 의 실제 하드 리밋. 이것만 하드 실패다.
 AIT_LIMIT=$((100 * 1024 * 1024))
-# 아래 둘은 참고선이다. 넘어도 실패시키지 않는다 — 근거는 ADR-0010.
+# 승인된 전송 예산. 저장소 AGENTS.md와 ADR-0006을 따른다.
 TOTAL_REFERENCE=$((15 * 1024 * 1024))
 PCK_REFERENCE=$((6 * 1024 * 1024))
 
@@ -79,19 +79,19 @@ for f in "${out_dir}"/*; do
   raw_total=$((raw_total + $(file_size "$f")))
 done
 
-printf "[web-budget] 총 전송량 %.2f MB (참고선 %.2f MB)\n" "$(mb $total)" "$(mb $TOTAL_REFERENCE)" >&2
-printf "[web-budget] pck        %.2f MB (참고선 %.2f MB)\n" "$(mb $pck)" "$(mb $PCK_REFERENCE)" >&2
+printf "[web-budget] 총 전송량 %.2f MB (예산 %.2f MB)\n" "$(mb $total)" "$(mb $TOTAL_REFERENCE)" >&2
+printf "[web-budget] pck        %.2f MB (예산 %.2f MB)\n" "$(mb $pck)" "$(mb $PCK_REFERENCE)" >&2
 printf "[web-budget] 비압축      %.2f MB / AIT 상한 %.2f MB\n" "$(mb $raw_total)" "$(mb $AIT_LIMIT)" >&2
 
 fail=0
 if [ "$audio_fail" -ne 0 ]; then fail=1; fi
-# 하드 실패는 플랫폼 상한 하나뿐이다. 나머지는 관측값으로 남긴다.
+# 플랫폼과 승인된 전송 예산을 함께 검사한다.
 [ "$raw_total" -gt "$AIT_LIMIT" ] && {
   echo "[web-budget] AIT 100MB 상한 초과. 패키징이 실패한다." >&2; fail=1; }
 [ "$total" -gt "$TOTAL_REFERENCE" ] && {
-  echo "[web-budget] 참고: 총 전송량이 참고선을 넘었다. 로딩 화면이 있으므로 차단하지 않는다." >&2; }
+  echo "[web-budget] 총 전송량이 15MB gzip 예산을 넘었다." >&2; fail=1; }
 [ "$pck" -gt "$PCK_REFERENCE" ] && {
-  echo "[web-budget] 참고: pck 가 참고선을 넘었다. 텍스처와 오디오를 먼저 본다." >&2; }
+  echo "[web-budget] pck가 6MB gzip 예산을 넘었다." >&2; fail=1; }
 
 # 로딩 화면이 실제로 셸에 들어갔는지 확인한다. 이게 빠지면 다운로드가 끝날
 # 때까지 흰 화면이 남고, AIT 체크리스트의 "10초 이내 최초 화면" 이 위태로워진다.
@@ -102,7 +102,7 @@ fi
 
 # 출하되는 pck 를 실제로 구동해 폰트 부착을 확인한다.
 log=$(mktemp)
-"${godot_bin}" --headless --main-pack "${out_dir}/index.pck" --quit-after 30 >"$log" 2>&1 || true
+python3 "$(dirname "$0")/run_godot.py" --log "$log" -- "${godot_bin}" --headless --main-pack "${out_dir}/index.pck" --quit-after 30
 clean=$(sed -e $'s/\033\\[[0-9;]*[A-Za-z]//g' "$log")
 if echo "$clean" | grep -qE "폰트를 (찾지|로드하지) 못했다"; then
   echo "[web-budget] 한국어 폰트가 pck 에 없다. cold export 가 importer 를 건너뛴 것을 의심한다." >&2

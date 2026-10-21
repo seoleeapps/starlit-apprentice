@@ -56,12 +56,18 @@ func _write(path: String, data: Dictionary) -> bool:
 	if f == null:
 		return false
 	f.store_string(JSON.stringify(data))
+	f.flush()
+	var written := f.get_error() == OK
 	f.close()
+	if not written:
+		return false
 	if FileAccess.file_exists(path):
 		# 원본을 백업으로 밀어 둔 뒤 교체한다. 어느 지점에서 끊겨도
 		# tmp·원본·백업 중 최소 하나는 온전한 JSON 이다.
 		var bak := path + ".bak"
 		if FileAccess.file_exists(bak):
-			DirAccess.remove_absolute(bak)
-		DirAccess.rename_absolute(path, bak)
+			if DirAccess.remove_absolute(bak) != OK:
+				return false
+		if DirAccess.rename_absolute(path, bak) != OK:
+			return false
 	return DirAccess.rename_absolute(tmp, path) == OK

@@ -1,0 +1,28 @@
+name: Release Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_ref:
+        description: 승인된 출시 후보 ref 또는 SHA
+        type: string
+        default: main
+      tag:
+        description: 출시 태그. 첫 출시는 v1.0.0 명시
+        type: string
+        default: v1.0.0
+      dry_run:
+        description: 태그와 원장 변경 없이 판정만 실행
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    uses: seorilabs/.github/.github/workflows/release-tag.yml@main
+    with:
+      target_ref: ${{ inputs.target_ref }}
+      tag: ${{ inputs.tag }}
+      dry_run: ${{ inputs.dry_run }}

@@ -3,8 +3,8 @@ extends SceneTree
 ##
 ## 실제 세이브(user://run.json)를 건드리지 않도록 별도 경로의 저장소를 주입한다.
 
-const RUN_PATH := "user://test_run.json"
-const META_PATH := "user://test_meta.json"
+var RUN_PATH := _test_path("save-run.json")
+var META_PATH := _test_path("save-meta.json")
 const ACTIONS_PATH := "res://data/actions.json"
 const EVENTS_PATH := "res://data/events.json"
 const ENDINGS_PATH := "res://data/endings.json"
@@ -104,7 +104,7 @@ func _test_corrupt_run_keeps_meta(profile: Node) -> Array[String]:
 		DirAccess.remove_absolute(RUN_PATH + ".bak")
 
 	if not profile.load_run().is_empty():
-		out.append("손상된 런이 폐기되지 않았다")
+		out.append("손상된 저장을 사용 가능한 런으로 읽었다")
 	if profile.runs_completed() != before:
 		out.append("런이 깨졌는데 메타 회차가 바뀌었다: %d -> %d"
 			% [before, profile.runs_completed()])
@@ -114,7 +114,9 @@ func _test_corrupt_run_keeps_meta(profile: Node) -> Array[String]:
 	# 스키마가 다른 저장도 같은 규칙으로 폐기된다.
 	profile._store().write_run({"schema": 999, "state": {"turn": 3}})
 	if not profile.load_run().is_empty():
-		out.append("다른 스키마 버전의 런이 폐기되지 않았다")
+		out.append("지원하지 않는 스키마를 사용 가능한 런으로 읽었다")
+	if not FileAccess.file_exists(RUN_PATH) or not FileAccess.get_file_as_string(RUN_PATH).contains("999"):
+		out.append("지원하지 않는 저장도 사용자의 새로 시작 전에는 원본을 보존해야 한다")
 	return out
 
 ## 완주 회차가 덱 인덱스를 정한다. 앱을 껐다 켜도 같은 덱으로 돌아가지 않는다.
@@ -166,3 +168,10 @@ func _load(path: String) -> Dictionary:
 		return {}
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
 	return parsed as Dictionary if parsed is Dictionary else {}
+
+func _test_path(file_name: String) -> String:
+	var base := OS.get_environment("STARLIT_SAVE_DIR")
+	if base.is_empty():
+		base = "user://tests/%d" % OS.get_process_id()
+	DirAccess.make_dir_recursive_absolute(base)
+	return base.path_join(file_name)

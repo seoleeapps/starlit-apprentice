@@ -1,0 +1,29 @@
+name: Promote Google Play
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 내부 테스트와 SDK 검수를 통과한 같은 AAB의 태그
+        type: string
+        required: true
+
+permissions:
+  contents: read
+  actions: read
+  id-token: write
+
+concurrency:
+  group: google-play-release-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  production:
+    uses: seorilabs/.github/.github/workflows/promote-google-play.yml@main
+    with:
+      release_tag: ${{ inputs.release_tag }}
+      package_name: com.seorilabs.starlitapprentice
+      from_track: internal
+      to_track: production
+      release_status: completed
+      rollout: "1"

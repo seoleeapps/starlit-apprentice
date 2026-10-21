@@ -1,0 +1,59 @@
+name: Deploy Google Play
+
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 검증된 출시 태그
+        type: string
+        required: true
+      upload:
+        description: Play 내부 테스트에 업로드. false도 중앙 before-build 검증 필수
+        type: boolean
+        default: true
+  workflow_call:
+    inputs:
+      release_tag:
+        type: string
+        required: true
+      upload:
+        type: boolean
+        default: true
+    secrets:
+      GOOGLE_PLAY_UPLOAD_KEYSTORE_BASE64:
+        required: false
+      GOOGLE_PLAY_UPLOAD_KEYSTORE_PASSWORD:
+        required: false
+      GOOGLE_PLAY_UPLOAD_KEY_PASSWORD:
+        required: false
+
+permissions:
+  contents: read
+  actions: read
+  id-token: write
+
+concurrency:
+  group: google-play-release-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  internal:
+    uses: seorilabs/.github/.github/workflows/godot-deploy-google-play.yml@main
+    with:
+      release_tag: ${{ inputs.release_tag || github.ref_name }}
+      package_name: com.seorilabs.starlitapprentice
+      track: internal
+      release_status: completed
+      upload: ${{ github.event_name == 'push' || inputs.upload }}
+      godot_version: "4.7.2"
+      godot_status: stable
+      aab_name: starlit-apprentice
+      build_script: scripts/build-android.sh
+      post_export_validation_script: scripts/validate-android-artifact.sh
+      timeout_minutes: 45
+    secrets:
+      GOOGLE_PLAY_UPLOAD_KEYSTORE_BASE64: ${{ secrets.GOOGLE_PLAY_UPLOAD_KEYSTORE_BASE64 }}
+      GOOGLE_PLAY_UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.GOOGLE_PLAY_UPLOAD_KEYSTORE_PASSWORD }}
+      GOOGLE_PLAY_UPLOAD_KEY_PASSWORD: ${{ secrets.GOOGLE_PLAY_UPLOAD_KEY_PASSWORD }}

@@ -1,0 +1,20 @@
+name: Cleanup Actions Storage
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 삭제 없이 대상만 조회
+        type: boolean
+        default: true
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cleanup:
+    uses: seorilabs/.github/.github/workflows/cleanup-actions-storage.yml@main
+    with:
+      runs_on: ubuntu-latest
+      dry_run: ${{ inputs.dry_run }}

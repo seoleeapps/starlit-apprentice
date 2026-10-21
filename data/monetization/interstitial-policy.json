@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "enabled": true,
+  "placement": "month_end_after_all_results",
+  "firstEligibleSeconds": 180,
+  "cooldownSeconds": 120,
+  "sessionCap": 6,
+  "dailyCap": 20,
+  "sessionInactivitySeconds": 1800,
+  "tutorialMonths": 1
+}

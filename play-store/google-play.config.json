@@ -4,67 +4,77 @@
   "appType": "game",
   "freeOrPaid": "free",
   "contactEmail": "cs@seorilabs.com",
-  "privacyPolicyUrl": "확정 필요",
+  "privacyPolicyUrl": "https://www.seorilabs.com/apps/starlit-apprentice/privacy/",
   "storeListing": {
     "appName": {
       "ko-KR": "별빛 견습생",
       "en-US": "Star Apprentice"
     },
     "shortDescription": {
-      "ko-KR": "4주 일정을 선택해 견습생을 성장시키는 픽셀 육성 시뮬레이션",
-      "en-US": "Raise an apprentice through monthly plans in a pixel life sim"
+      "ko-KR": "36번의 선택으로 견습생의 능력과 진로를 만드는 픽셀 육성 게임",
+      "en-US": "Guide an apprentice through 36 turns of growth, choices, and story"
     },
     "fullDescription": {
-      "ko-KR": "별빛 견습생은 한 달 4주 일정을 정해 견습생의 능력과 미래를 만들어 가는 픽셀 육성 시뮬레이션 게임입니다.\n\n공부, 일, 휴식, 외출을 조합해 12개월을 보내고, 선택의 누적 결과에 따라 서로 다른 엔딩을 확인합니다. 모든 진행은 기기 안에 저장되며, 초기 버전에는 로그인, 결제, 서버 저장, 광고 SDK가 포함되지 않습니다.\n\n주요 특징\n- 월마다 4주 일정을 선택하는 간결한 육성 루프\n- 지성, 감성, 예법, 기술, 체력, 평판 등 14가지 능력과 골드, 기력, 스트레스 자원 변화\n- 성장 방향에 따라 달라지는 30가지 엔딩\n- 짧은 세션으로 진행할 수 있는 모바일 중심 UI\n- 오프라인에서도 유지되는 로컬 저장 기반 진행",
-      "en-US": "Star Apprentice is a pixel life simulation game where you choose four weekly activities each month and guide an apprentice toward a future.\n\nBalance study, work, rest, and outings across 12 months. Your accumulated choices change the apprentice's 14 growth stats and resources, then lead to different endings. The first version stores progress on the device and does not include login, payments, server saves, or production ad SDKs.\n\nFeatures\n- A compact monthly planning loop with four weekly choices\n- Changes across 14 growth stats plus gold, energy, and stress resources\n- 30 endings shaped by long-term growth choices\n- Mobile-first screens designed for short play sessions\n- Local save progress that remains available offline"
+      "ko-KR": "별빛 견습생은 12개월 동안 36번의 행동을 선택하며 견습생의 미래를 만들어 가는 픽셀 육성 게임입니다.\n\n공부, 일, 휴식, 외출을 조합하고 만나는 사람들의 이야기에 답하세요. 능력, 골드, 기력과 스트레스를 살피며 자신만의 진로를 찾아갑니다. 선택이 쌓이면 서로 다른 30가지 엔딩을 만날 수 있습니다.\n\n주요 특징\n- 한 달을 상순, 중순, 하순으로 나누는 36턴 육성\n- 성장 방향과 인연에 따라 이어지는 이야기와 엔딩\n- 한국어와 영어 지원, 타이틀에서 언어 변경\n- 로그인과 서버 저장 없이 기기에 보관되는 진행 기록\n\n이 게임은 무료이며 전면광고를 포함합니다. 광고는 월말 정산과 이벤트 결과를 모두 확인한 뒤에만 검토하며, 광고를 볼 수 없는 경우에도 진행할 수 있습니다. 앱 내 결제는 없습니다.",
+      "en-US": "Star Apprentice is a pixel life simulation where you guide an apprentice through 36 turns across twelve months.\n\nChoose study, work, rest, and outings, then respond to the people you meet. Balance abilities, gold, energy, and stress as your choices shape a future. Discover thirty endings through different paths of growth.\n\nFeatures\n- Thirty-six turns, with three activity choices each month\n- Stories and endings shaped by your growth and relationships\n- Korean and English, with a language switch on the title screen\n- Progress stored locally, with no account or server save\n\nThe game is free and includes interstitial ads. Ads are considered only after all month-end and event results have been acknowledged. You can continue when an ad is unavailable. There are no in-app purchases."
     }
   },
   "assets": {
     "playIcon": "play-store/assets/icon-512.png",
     "featureGraphic": "play-store/assets/feature-graphic-1024x500.png",
     "phoneScreenshots": [
-      "play-store/screenshots/phone/starlit-apprentice-start-1080x1920.png",
-      "play-store/screenshots/phone/starlit-apprentice-main-1080x1920.png",
-      "play-store/screenshots/phone/starlit-apprentice-schedule-1080x1920.png",
-      "play-store/screenshots/phone/starlit-apprentice-result-1080x1920.png"
+      "play-store/screenshots/phone/ko/01-title-720x1280.png",
+      "play-store/screenshots/phone/ko/02-action-scroll-720x1280.png",
+      "play-store/screenshots/phone/ko/05-month-end-720x1280.png",
+      "play-store/screenshots/phone/ko/06-event-720x1280.png",
+      "play-store/screenshots/phone/ko/08-ending-720x1280.png"
     ],
-    "sevenInchTabletScreenshots": [
-      "play-store/screenshots/tablet-7/starlit-apprentice-start-1440x2560.png",
-      "play-store/screenshots/tablet-7/starlit-apprentice-main-1440x2560.png",
-      "play-store/screenshots/tablet-7/starlit-apprentice-schedule-1440x2560.png",
-      "play-store/screenshots/tablet-7/starlit-apprentice-result-1440x2560.png"
-    ],
-    "tenInchTabletScreenshots": [
-      "play-store/screenshots/tablet-10/starlit-apprentice-start-1800x3200.png",
-      "play-store/screenshots/tablet-10/starlit-apprentice-main-1800x3200.png",
-      "play-store/screenshots/tablet-10/starlit-apprentice-schedule-1800x3200.png",
-      "play-store/screenshots/tablet-10/starlit-apprentice-result-1800x3200.png"
-    ]
+    "localizedPhoneScreenshots": {
+      "en-US": [
+        "play-store/screenshots/phone/en/01-title-720x1280.png",
+        "play-store/screenshots/phone/en/02-action-scroll-720x1280.png",
+        "play-store/screenshots/phone/en/05-month-end-720x1280.png",
+        "play-store/screenshots/phone/en/06-event-720x1280.png",
+        "play-store/screenshots/phone/en/08-ending-720x1280.png"
+      ]
+    }
   },
   "contentDeclarations": {
     "dataSafety": {
-      "status": "repo-evidence-prepared",
-      "dataCollected": "none",
-      "dataShared": "none",
-      "onDeviceData": "local progress and ending collection only",
+      "status": "pending-sdk-review-and-play-console-submission",
+      "onDeviceData": "progress, ending collection, language, age bracket, consent state, interstitial policy counters",
+      "sdk": "Poing AdMob v5.1.0, Google Mobile Ads and UMP; final SDK dependency readback required",
       "accountDeletion": "not-applicable-no-account-system",
       "privacyPolicyRequired": true,
       "evidence": "docs/privacy-and-data-safety.md",
       "consoleStatus": "pending-play-console-submission"
     },
     "contentRating": "확정 필요 - IARC 및 한국 게임 등급 증빙 필요",
-    "targetAudience": "general-audience-not-children",
-    "ads": "no",
+    "targetAudience": "13-and-older; console-age-groups-pending",
+    "ads": "yes",
     "koreaDistribution": "yes",
     "koreaGameRating": "확정 필요 - Play Console 또는 게임물관리위원회 증빙 필요"
   },
   "manualEvidence": {
     "androidAppBundle": "확정 필요",
     "playConsoleListing": "확정 필요",
-    "policyQuestionnaire": "확정 필요"
+    "policyQuestionnaire": "확정 필요",
+    "screenshots": "Current Godot rendering, ko/en 720x1280, docs/qa/android-launch-screenshots.md",
+    "privacyPolicyPublication": "Live ko/en pages verified 200 after seorilabs-official PR85, Pages run39582055303, source9e1185c2f649b09bee3e0d4d379a3cdea527748d"
   },
   "sourceUrls": {
     "previewAssets": "https://support.google.com/googleplay/android-developer/answer/9866151",
     "iconSpec": "https://developer.android.com/distribute/google-play/resources/icon-design-specifications"
+  },
+  "release": {
+    "versionName": "1.0.0",
+    "versionCode": "확정 필요 - Play 업로드 최댓값 확인 후 중앙 원장에서 할당",
+    "track": "internal",
+    "productionRollout": 1,
+    "countries": "all-available-including-KR",
+    "releaseNotes": {
+      "ko-KR": "별빛 견습생 첫 출시. 36턴 육성, 이야기 선택과 엔딩 수집을 한국어와 영어로 즐길 수 있습니다.",
+      "en-US": "First release of Star Apprentice. Guide an apprentice through 36 turns, story choices, and an ending collection in Korean or English."
+    }
   }
 }

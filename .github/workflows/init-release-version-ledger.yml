@@ -1,0 +1,33 @@
+name: Initialize Release Version Ledger
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 원장 생성 없이 판정만 실행
+        type: boolean
+        default: true
+      play_readback_base64:
+        description: 검증된 Play 최대 versionCode 조회 JSON의 base64
+        type: string
+        default: ""
+      attestation_base64:
+        description: 운영자가 관측한 최대 versionCode 증명 JSON의 base64
+        type: string
+        default: ""
+      accept_attestation:
+        description: 제공한 운영자 증명을 초기 기준으로 사용
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  initialize:
+    uses: seorilabs/.github/.github/workflows/init-release-version-ledger.yml@main
+    with:
+      dry_run: ${{ inputs.dry_run }}
+      play_readback_base64: ${{ inputs.play_readback_base64 }}
+      attestation_base64: ${{ inputs.attestation_base64 }}
+      accept_attestation: ${{ inputs.accept_attestation }}

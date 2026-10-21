@@ -37,3 +37,7 @@ assets/art/qa_sheet.png
 # vendoring tree 체크섬이 CHECKSUM과 어긋나 SDK 소비자로 인식되지 않는다.
 # 이 디렉터리 밖의 .uid는 프로젝트 자산이므로 그대로 커밋한다.
 /addons/seorilabs_platform/**/*.uid
+
+# Python development tools
+__pycache__/
+*.pyc

@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 2,
+  "e2e": {
+    "workflow": ".github/workflows/godot-checks.yml",
+    "command": "bash scripts/test_all.sh"
+  },
+  "regressionPaths": [
+    "project.godot",
+    "addons/**",
+    "android/**",
+    "export_presets.cfg",
+    "package-lock.json",
+    ".godot-version"
+  ],
+  "platformPaths": [
+    "export_presets.cfg",
+    "android/**",
+    "addons/admob/**",
+    "**/*.gdap",
+    "**/*.gdextension"
+  ],
+  "features": [
+    {
+      "id": "core-loop",
+      "core": true,
+      "paths": [
+        "packages/product-core/**",
+        "src/game/run_controller.gd",
+        "src/ui/main.gd",
+        "src/ui/turn_screen.gd",
+        "data/actions.json"
+      ]
+    },
+    {
+      "id": "card-scroll",
+      "core": false,
+      "paths": [
+        "src/ui/turn_screen.gd"
+      ]
+    },
+    {
+      "id": "events",
+      "core": true,
+      "paths": [
+        "packages/product-core/src/domain/event_requirements.gd",
+        "packages/product-core/src/use_cases/resolve_event_choice.gd",
+        "data/events.json",
+        "data/npcs.json",
+        "src/ui/main.gd"
+      ]
+    },
+    {
+      "id": "monthly-settlement",
+      "core": false,
+      "paths": [
+        "packages/product-core/**",
+        "src/game/run_controller.gd"
+      ]
+    },
+    {
+      "id": "endings",
+      "core": true,
+      "paths": [
+        "packages/product-core/src/domain/ending_requirements.gd",
+        "packages/product-core/src/domain/ending_judgement.gd",
+        "data/endings.json",
+        "src/ui/main.gd"
+      ]
+    },
+    {
+      "id": "save",
+      "core": true,
+      "foundation": true,
+      "paths": [
+        "autoload/profile.gd",
+        "src/game/file_storage.gd",
+        "src/game/run_controller.gd"
+      ],
+      "platformPaths": []
+    },
+    {
+      "id": "localization",
+      "core": false,
+      "paths": [
+        "src/content/**",
+        "data/i18n/**",
+        "autoload/profile.gd",
+        "src/ui/**"
+      ],
+      "platformPaths": []
+    },
+    {
+      "id": "settings",
+      "core": false,
+      "paths": [
+        "autoload/profile.gd",
+        "src/ui/main.gd"
+      ]
+    },
+    {
+      "id": "ads",
+      "core": false,
+      "foundation": true,
+      "paths": [
+        "src/game/interstitial_service.gd",
+        "src/platform/**",
+        "data/monetization/**",
+        "src/ui/main.gd"
+      ],
+      "platformPaths": [
+        "src/platform/android_admob_adapter.gd",
+        "addons/admob/**",
+        "android/plugins/**"
+      ]
+    },
+    {
+      "id": "audio",
+      "core": false,
+      "paths": [
+        "autoload/audio.gd",
+        "assets/audio/**",
+        "src/ui/main.gd"
+      ]
+    }
+  ]
+}

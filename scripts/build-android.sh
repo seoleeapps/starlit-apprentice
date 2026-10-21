@@ -16,12 +16,22 @@ set -a
 . ./build.env
 set +a
 
+build_log_dir="${SEORI_ANDROID_BUILD_LOG_DIR:-$repo_root/build/qa/android/$(date -u +%Y%m%dT%H%M%SZ)-$$}"
+mkdir -p "$build_log_dir"
+if [ -e .git ]; then
+  [ -z "$(git diff --name-only)$(git diff --cached --name-only)" ] || fail "빌드 소스에 미커밋 변경이 있다."
+fi
+# 중앙 workflow 밖의 로컬/build-only 실행도 같은 before-build 검증을 통과해야 한다.
+bash scripts/verify-android-evidence.sh 2>&1 | tee "$build_log_dir/development-evidence.log"
+python3 tools/check_android_release.py --source-only | tee "$build_log_dir/source-inspection.json"
+
 godot_bin="${GODOT_BIN:-godot}"
 for tool in "$godot_bin" java keytool jarsigner python3; do
   command -v "$tool" >/dev/null 2>&1 || fail "툴체인에 $tool이 없다."
 done
 
-engine="$($godot_bin --headless --version | head -1)"
+python3 scripts/run_godot.py --log "$build_log_dir/version.log" --timeout 20 -- "$godot_bin" --headless --version
+engine="$(head -1 "$build_log_dir/version.log.clean")"
 case "$engine" in
   "${GODOT_VERSION}.${GODOT_STATUS}"*) ;;
   *) fail "Godot 버전 불일치: 실제=$engine, 요구=${GODOT_VERSION}.${GODOT_STATUS}" ;;
@@ -35,7 +45,12 @@ esac
 
 temporary_directory=""
 created_android_template=false
+had_android_gdignore=false
+[ ! -f android/.gdignore ] || had_android_gdignore=true
 preset_backup=""
+project_backup=""
+runtime_backup=""
+runtime_prepared=false
 cleanup() {
   exit_status=$?
   trap - EXIT
@@ -43,13 +58,26 @@ cleanup() {
     cp "$preset_backup" "$repo_root/export_presets.cfg"
     rm -f "$preset_backup"
   fi
+  if [ -n "$project_backup" ] && [ -f "$project_backup" ]; then
+    cp "$project_backup" "$repo_root/project.godot"
+    rm -f "$project_backup"
+  fi
+  if [ "$runtime_prepared" = true ]; then
+    if [ -n "$runtime_backup" ] && [ -f "$runtime_backup" ]; then
+      cp "$runtime_backup" "$repo_root/config/android_runtime.json"
+      rm -f "$runtime_backup"
+    else
+      rm -f "$repo_root/config/android_runtime.json"
+    fi
+  fi
   if [ "$created_android_template" = true ]; then
     rm -rf "$repo_root/android/build"
-    rm -f "$repo_root/android/.build_version" "$repo_root/android/.gdignore"
+    rm -f "$repo_root/android/.build_version"
+    if [ "$had_android_gdignore" = false ]; then rm -f "$repo_root/android/.gdignore"; fi
     rmdir "$repo_root/android" 2>/dev/null || true
   fi
   if [ -n "$temporary_directory" ] && [ -d "$temporary_directory" ]; then
-    rm -f "$temporary_directory"/*.jks "$temporary_directory"/*.log
+    rm -f "$temporary_directory"/*.jks
     rmdir "$temporary_directory" 2>/dev/null || true
   fi
   exit "$exit_status"
@@ -114,8 +142,9 @@ else
   : "${GOOGLE_PLAY_UPLOAD_KEYSTORE_PASSWORD:?GOOGLE_PLAY_UPLOAD_KEYSTORE_PASSWORD가 필요하다.}"
   keystore_base64="$GOOGLE_PLAY_UPLOAD_KEYSTORE_BASE64"
   keystore_password="$GOOGLE_PLAY_UPLOAD_KEYSTORE_PASSWORD"
+  key_password="${GOOGLE_PLAY_UPLOAD_KEY_PASSWORD:-$keystore_password}"
   alias_name="${GOOGLE_PLAY_UPLOAD_KEY_ALIAS:-}"
-  unset GOOGLE_PLAY_UPLOAD_KEYSTORE_BASE64 GOOGLE_PLAY_UPLOAD_KEYSTORE_PASSWORD GOOGLE_PLAY_UPLOAD_KEY_ALIAS
+  unset GOOGLE_PLAY_UPLOAD_KEYSTORE_BASE64 GOOGLE_PLAY_UPLOAD_KEYSTORE_PASSWORD GOOGLE_PLAY_UPLOAD_KEY_PASSWORD GOOGLE_PLAY_UPLOAD_KEY_ALIAS
   temporary_directory="$(mktemp -d "${TMPDIR:-/tmp}/starlit-production.XXXXXX")"
   if ! printf '%s' "$keystore_base64" | base64 --decode > "$temporary_directory/upload.jks" 2>/dev/null; then
     printf '%s' "$keystore_base64" | base64 -D > "$temporary_directory/upload.jks"
@@ -130,9 +159,10 @@ else
   [ -n "$alias_name" ] || fail "업로드 키 alias를 확인할 수 없다."
   export GODOT_ANDROID_KEYSTORE_RELEASE_PATH="$temporary_directory/upload.jks"
   export GODOT_ANDROID_KEYSTORE_RELEASE_USER="$alias_name"
-  export GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD="$keystore_password"
-  unset keystore_password
-  artifact="$repo_root/$AAB_PATH"
+  export GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD="$key_password"
+  unset keystore_password key_password
+  artifact="${SEORI_ANDROID_AAB_OUTPUT:-$repo_root/$AAB_PATH}"
+  [[ "$artifact" = /* && "$artifact" = *.aab ]] || fail "산출물은 absolute .aab 경로여야 한다."
 
   preset_backup="$temporary_directory/export_presets.cfg.backup"
   cp export_presets.cfg "$preset_backup"
@@ -153,29 +183,23 @@ path.write_text(text, encoding="utf-8")
 PY
 fi
 
+project_backup="$temporary_directory/project.godot.backup"
+cp project.godot "$project_backup"
+if [ -f config/android_runtime.json ]; then
+  runtime_backup="$temporary_directory/android_runtime.json.backup"
+  cp config/android_runtime.json "$runtime_backup"
+fi
+runtime_prepared=true
+python3 tools/prepare_android_ads.py
+
 mkdir -p "$(dirname "$artifact")"
 rm -f "$artifact"
 
 run_godot_checked() {
   local label="$1"
   shift
-  local log_file="$temporary_directory/$label.log"
-  local command_status
-  local errors
-  set +e
-  "$godot_bin" "$@" >"$log_file" 2>&1
-  command_status=$?
-  set -e
-  if [ "$command_status" -ne 0 ]; then
-    sed -n '1,240p' "$log_file" >&2
-    fail "Godot ${label} 단계가 exit ${command_status}로 실패했다."
-  fi
-  errors="$(sed $'s/\\033\\[[0-9;]*m//g' "$log_file" | grep -E '^(SCRIPT ERROR|ERROR):' \
-    | grep -Ev '^ERROR: [0-9]+ resources? still in use at exit' || true)"
-  if [ -n "$errors" ]; then
-    printf '%s\n' "$errors" >&2
-    fail "Godot $label 로그에서 오류를 발견했다."
-  fi
+  local log_file="$build_log_dir/$label.log"
+  python3 scripts/run_godot.py --log "$log_file" --timeout 600 -- "$godot_bin" "$@"
 }
 
 run_godot_checked import --headless --path "$PROJECT_DIR" --import --quit
@@ -194,5 +218,17 @@ case "$verify_output" in
   *"jar verified."*) ;;
   *) fail "AAB가 서명되지 않았다." ;;
 esac
+
+python3 tools/check_android_release.py \
+  --aab "$artifact" \
+  --version-name "${SEORI_RELEASE_VERSION_NAME:-1.0.0}" \
+  --version-code "${SEORI_RELEASE_VERSION_CODE:-1}" \
+  --report "$build_log_dir/release-inspection.json"
+python3 - "$build_log_dir/release-inspection.json" "$artifact" > "$build_log_dir/artifact.sha256" <<'PY'
+import json
+import sys
+from pathlib import Path
+print(json.loads(Path(sys.argv[1]).read_text())["sha256"] + "  " + sys.argv[2])
+PY
 
 echo "Android AAB 생성 완료: $artifact"

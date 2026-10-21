@@ -52,9 +52,9 @@ fi
 godot_version="${godot_version_number}"
 
 ensure_linux_godot() {
-  if command -v godot >/dev/null 2>&1 && godot --version | grep -q "^${godot_version}.${godot_status}"; then
+  if command -v godot >/dev/null 2>&1 && python3 "${script_dir}/run_godot.py" --log "${project_dir}/build/qa/ensure-version.log" --timeout 20 -- godot --version | grep -q "^${godot_version}.${godot_status}"; then
     echo "Using preinstalled Godot: $(command -v godot)"
-    godot --version
+    python3 "${script_dir}/run_godot.py" --log "${project_dir}/build/qa/ensure-version.log" --timeout 20 -- godot --version
     return
   fi
 
@@ -92,13 +92,13 @@ ensure_linux_godot() {
   if [ -n "${GITHUB_PATH:-}" ]; then
     echo "${HOME}/.local/bin" >> "${GITHUB_PATH}"
   fi
-  godot --version
+  python3 "${script_dir}/run_godot.py" --log "${project_dir}/build/qa/ensure-version.log" --timeout 20 -- godot --version
 }
 
 ensure_macos_godot() {
-  if command -v godot >/dev/null 2>&1 && godot --version | grep -q "^${godot_version}.${godot_status}"; then
+  if command -v godot >/dev/null 2>&1 && python3 "${script_dir}/run_godot.py" --log "${project_dir}/build/qa/ensure-version.log" --timeout 20 -- godot --version | grep -q "^${godot_version}.${godot_status}"; then
     echo "Using preinstalled Godot: $(command -v godot)"
-    godot --version
+    python3 "${script_dir}/run_godot.py" --log "${project_dir}/build/qa/ensure-version.log" --timeout 20 -- godot --version
     return
   fi
 

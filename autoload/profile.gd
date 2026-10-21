@@ -13,28 +13,34 @@ var _storage: SaFileStorage
 
 func _ready() -> void:
 	if _storage == null:
-		_storage = SaFileStorage.new(RUN_SAVE_PATH, META_SAVE_PATH)
+		_storage = _default_storage()
 
 ## 테스트가 실제 세이브를 건드리지 않도록 저장소를 갈아끼운다.
 func use_storage(storage: SaFileStorage) -> void:
 	_storage = storage
 
+func _default_storage() -> SaFileStorage:
+	var isolated := OS.get_environment("STARLIT_SAVE_DIR")
+	if isolated != "":
+		DirAccess.make_dir_recursive_absolute(isolated)
+		return SaFileStorage.new(isolated.path_join("run.json"), isolated.path_join("meta.json"))
+	return SaFileStorage.new(RUN_SAVE_PATH, META_SAVE_PATH)
+
 func _store() -> SaFileStorage:
 	if _storage == null:
-		_storage = SaFileStorage.new(RUN_SAVE_PATH, META_SAVE_PATH)
+		_storage = _default_storage()
 	return _storage
 
 # ── 런 ─────────────────────────────────────────────────────────────
 func has_saved_run() -> bool:
 	return not load_run().is_empty()
 
-## 스키마가 다르거나 파싱이 깨진 런은 폐기한다. 메타는 건드리지 않는다.
+## 읽을 수 없는 런은 이어하지 않는다. 파일과 메타는 보존한다.
 func load_run() -> Dictionary:
 	var raw := _store().read_run()
 	if raw.is_empty():
 		return {}
 	if int(raw.get("schema", 0)) != SAVE_SCHEMA_VERSION:
-		clear_run()
 		return {}
 	return raw
 
@@ -74,7 +80,7 @@ func set_sound_enabled(enabled: bool) -> void:
 	_store().write_meta(m)
 
 ## 런 완주. 회차를 올리고 도달한 엔딩을 남긴 뒤 런 저장을 지운다.
-func record_completion(ending_code: String) -> void:
+func record_completion(ending_code: String) -> bool:
 	var m := meta()
 	m["runs_completed"] = int(m.get("runs_completed", 0)) + 1
 	var codes: Array = m.get("endings", [])
@@ -82,5 +88,34 @@ func record_completion(ending_code: String) -> void:
 		codes.append(ending_code)
 	m["endings"] = codes
 	m["schema"] = SAVE_SCHEMA_VERSION
-	_store().write_meta(m)
+	if not _store().write_meta(m):
+		return false
 	clear_run()
+	return true
+
+func language() -> String:
+	var saved := String(meta().get("language", ""))
+	if saved in ["ko", "en"]:
+		return saved
+	return "ko" if OS.get_locale_language() == "ko" else "en"
+
+func set_language(value: String) -> bool:
+	return set_setting("language", value) if value in ["ko", "en"] else false
+
+func age_band() -> String:
+	return String(meta().get("age_band", "unknown"))
+
+func set_age_band(value: String) -> bool:
+	return set_setting("age_band", value) if value in ["unknown", "under13", "13-15", "16-17", "adult"] else false
+
+func set_setting(key: String, value: Variant) -> bool:
+	var m := meta()
+	m[key] = value
+	m["schema"] = SAVE_SCHEMA_VERSION
+	return _store().write_meta(m)
+
+func ad_state() -> Dictionary:
+	return meta().get("ad_state", {})
+
+func save_ad_state(value: Dictionary) -> bool:
+	return set_setting("ad_state", value)
