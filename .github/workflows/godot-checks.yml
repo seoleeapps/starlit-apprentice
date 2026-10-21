@@ -55,7 +55,7 @@ jobs:
             height="${viewport#*x}"
             output="build/e2e/render-$locale-$viewport"
             python3 scripts/run_godot.py --log "$output.log" -- \
-              xvfb-run -a godot --rendering-driver opengl3 --path . \
+              xvfb-run -a godot --rendering-driver opengl3 --audio-driver Dummy --path . \
               --script res://tools/e2e/journey.gd -- --out "$output" \
               --locale "$locale" --capture --width "$width" --height "$height"
           done
