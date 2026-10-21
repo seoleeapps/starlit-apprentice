@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "release": {
+    "lastTag": null,
+    "lastSourceSha": null,
+    "marketingVersion": null
+  },
+  "android": {
+    "authority": "github-ledger",
+    "lastVersionCode": 0,
+    "legacyFallbackSealed": false
+  },
+  "ios": {
+    "authority": "xcode-cloud",
+    "lastObservedBuildNumber": null,
+    "lastObservedTag": null
+  },
+  "provenance": {
+    "initializedAt": "2026-10-21T11:29:46Z",
+    "initializedBy": "release-version-ledger-init-v1",
+    "initializedFromWorkflowSha": "17005d45dcb358b666d91ea9a2ec30a2c79b1e9a",
+    "authorityRevision": "26721fdbf3cdde6da01b8af05f7d867bfe71a40e7180f1bc1f6c903df4aa9422",
+    "baseline": {
+      "androidVersionCode": 0,
+      "rule": "max-of-verified-sources",
+      "sources": [
+        {
+          "kind": "google-play-bundles-list",
+          "androidVersionCode": 0,
+          "packageName": "com.seorilabs.starlitapprentice",
+          "observedAt": "2026-10-21T11:28:50Z",
+          "evidenceDigest": "sha256:636bc2d80b434e994d100ea146cd5cd91007dfef82c44380714bdfbb7daaaf99"
+        }
+      ]
+    }
+  }
+}
