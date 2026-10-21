@@ -41,24 +41,24 @@
   },
   "contentDeclarations": {
     "dataSafety": {
-      "status": "pending-sdk-review-and-play-console-submission",
+      "status": "saved-in-play-console-awaiting-review",
       "onDeviceData": "progress, ending collection, language, age bracket, consent state, interstitial policy counters",
-      "sdk": "Poing AdMob v5.1.0, Google Mobile Ads and UMP; final SDK dependency readback required",
+      "sdk": "Poing AdMob v5.1.0, Google Mobile Ads Next-Gen 1.4.0 and UMP; final AAB dependency inspection pending",
       "accountDeletion": "not-applicable-no-account-system",
       "privacyPolicyRequired": true,
       "evidence": "docs/privacy-and-data-safety.md",
-      "consoleStatus": "pending-play-console-submission"
+      "consoleStatus": "saved-preview-and-csv-readback-2026-10-21"
     },
-    "contentRating": "확정 필요 - IARC 및 한국 게임 등급 증빙 필요",
-    "targetAudience": "13-and-older; console-age-groups-pending",
+    "contentRating": "IARC saved; Korea GRAC all ages, Australia ACB General; final review pending",
+    "targetAudience": "13-and-older; 13-15, 16-17, 18+ saved",
     "ads": "yes",
     "koreaDistribution": "yes",
-    "koreaGameRating": "확정 필요 - Play Console 또는 게임물관리위원회 증빙 필요"
+    "koreaGameRating": "Play IARC GRAC all ages observed; final review pending"
   },
   "manualEvidence": {
     "androidAppBundle": "확정 필요",
-    "playConsoleListing": "확정 필요",
-    "policyQuestionnaire": "확정 필요",
+    "playConsoleListing": "KO/EN required listing fields and phone5 each saved, ready for review not sent; docs/06-release/evidence/2026-10-21-console-recovery.json",
+    "policyQuestionnaire": "IARC, audience13+ and Data safety saved; current observation linked in Console recovery evidence",
     "screenshots": "Current Godot rendering, ko/en 720x1280, docs/qa/android-launch-screenshots.md",
     "privacyPolicyPublication": "Live ko/en pages verified 200 after seorilabs-official PR85, Pages run39582055303, source9e1185c2f649b09bee3e0d4d379a3cdea527748d"
   },

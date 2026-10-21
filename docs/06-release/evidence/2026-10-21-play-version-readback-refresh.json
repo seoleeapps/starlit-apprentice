@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "kind": "google-play-version-code-readback",
+  "packageName": "com.seorilabs.starlitapprentice",
+  "observedAt": "2026-10-21T11:28:50Z",
+  "source": "androidpublisher-v3-edits",
+  "maxVersionCode": null,
+  "bundleVersionCodes": [],
+  "apkVersionCodes": [],
+  "tracks": [
+    {
+      "track": "production",
+      "versionCodes": []
+    },
+    {
+      "track": "beta",
+      "versionCodes": []
+    },
+    {
+      "track": "alpha",
+      "versionCodes": []
+    },
+    {
+      "track": "internal",
+      "versionCodes": []
+    }
+  ],
+  "status": "READY",
+  "evidenceDigest": "636bc2d80b434e994d100ea146cd5cd91007dfef82c44380714bdfbb7daaaf99"
+}

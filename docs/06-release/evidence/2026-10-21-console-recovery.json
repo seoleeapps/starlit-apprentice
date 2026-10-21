@@ -1,0 +1,465 @@
+{
+  "kind": "play-console-registration-recovery-observation",
+  "observedAt": "2026-10-21T11:35:14.493619+00:00",
+  "source": {
+    "head": "c48d18cc71502cd61b40dcdb3450b6af78a22e51",
+    "contentHashes": {
+      "data/events.json": "7013618a0524dba5397523709b2fb4a82e521fee8587f10ecf33a3d18181e042",
+      "data/i18n/ko.json": "5e4fe7dc723c8f10d8f2fe8680a5a1213413c57a37eb41576ea71ab7cb246a1c",
+      "data/i18n/en.json": "fd5c1813354de480e6c376f555efc302e6fe27ca7199beef01fb5ef13711f20c"
+    },
+    "contentMatchesHead": {
+      "data/events.json": true,
+      "data/i18n/ko.json": true,
+      "data/i18n/en.json": true
+    },
+    "sourceReview": "117f006의 승인 변경과 추가된 한국어 차 음료 문구를 실제 읽음. 제품 파일 수정 없음."
+  },
+  "account": {
+    "account": "Seolee Apps",
+    "type": "PERSONAL",
+    "package": "com.seorilabs.starlitapprentice"
+  },
+  "developerId": "5547060480954653351",
+  "appId": "4972457200651625275",
+  "iarc": {
+    "status": "saved_complete",
+    "consoleSubmittedAtKST": "2026-10-21 20:14",
+    "certificateIdDisplayed": "-",
+    "ratings": {
+      "호주": "ACB 일반, 아주 가벼운 욕설",
+      "브라질": "전체이용가, 부적절한 언어",
+      "북미": "ESRB 전체이용가, 약간 거친 표현",
+      "한국": "GRAC 전체이용가",
+      "대만": "만 12세 이상 부모 지도 요망, 부적절한 언어",
+      "사우디 아라비아": "만 7세",
+      "유럽": "PEGI 3",
+      "독일": "USK 전체이용가",
+      "기타 국가": "IARC Generic 만 3세 이상",
+      "러시아": "3세 이상"
+    },
+    "compatibleWithApproved13Plus": true,
+    "answers": {
+      "violence": false,
+      "fear": false,
+      "sexualContent": false,
+      "gambling": false,
+      "offensiveLanguage": {
+        "present": true,
+        "type": "사소한 욕설",
+        "frequency": "드물게",
+        "source": "npc.gu.02: 물어보는 놈은 안 도와."
+      },
+      "drugsAlcoholTobacco": false,
+      "crudeHumor": false,
+      "digitalPurchasesCashRewardsNFT": false,
+      "userInteraction": false,
+      "preciseLocationSharing": false,
+      "nazi": false,
+      "KoreaNationalIdentityHarm": false,
+      "terrorismAdvocacy": false,
+      "realisticCrimeTechniques": false
+    },
+    "questionGambling": "게임에 도박, 카지노 도박/빙고 모사, 도박 테마가 있습니까? 사용자 생성 콘텐츠에는 해당하지 않습니다.",
+    "questionSubstances": "게임에 약물이나 술, 흡연을 언급하거나 사용하는 내용이 포함되어 있나요? 사용자 생성 콘텐츠에는 해당하지 않습니다.",
+    "reasoning": [
+      "첫눈 예보는 참가비, 판돈, 실패 금화 손실이 없는 의뢰이며 성공 사례금 200금화 지급이다.",
+      "라이벌과의 경쟁은 누가 먼저 찾아도 두 이름을 기록하며 금전 또는 조건부 대가가 없다.",
+      "배당표는 예상 순위표로 바뀌었고 약, 약값, 약 달이기 및 주류 언급은 식사, 휴식, 물과 이불, 차 음료로 바뀌었다.",
+      "cond.medicated는 화면에 표시되지 않는 내부 호환 상태 flag다. 표시 콘텐츠로 보지 않았다.",
+      "가벼운 비속어는 남아 있으므로 이전 신고를 유지했다. 이전 예 답변을 일괄 아니요로 바꾸지 않았다."
+    ],
+    "evidence": [
+      "/tmp/starlit-recovery-iarc-answers.json",
+      "/tmp/starlit-recovery-iarc-answers.png",
+      "/tmp/starlit-recovery-iarc-summary.txt",
+      "/tmp/starlit-recovery-iarc-summary.png",
+      "/tmp/starlit-recovery-iarc-saved.json",
+      "/tmp/starlit-recovery-iarc-saved.png"
+    ]
+  },
+  "audience": {
+    "saved": true,
+    "ages": [
+      "13-15",
+      "16-17",
+      "18+"
+    ],
+    "evidence": "/tmp/starlit-recovery-target-saved.json"
+  },
+  "dataSafety": {
+    "saved": true,
+    "sdk": "Poing v5.1.0, Google Mobile Ads Next-Gen 1.4.0, UMP",
+    "typesCollectedAndShared": [
+      "대략적인 위치",
+      "사용자 ID",
+      "앱 상호작용",
+      "진단",
+      "기기 또는 기타 ID",
+      "기타 개인 정보(연령에서 유도한 제한 신호)"
+    ],
+    "purposesDefaultSdk": [
+      "애널리틱스",
+      "광고 또는 마케팅",
+      "사기 예방, 보안, 규정 준수"
+    ],
+    "ageSignalPurposes": [
+      "광고 또는 마케팅",
+      "사기 예방, 보안, 규정 준수"
+    ],
+    "ephemeral": false,
+    "optional": true,
+    "optionalReason": "모든 지역에서 연령 미선택 상태로 게임을 이용할 수 있고 해당 상태는 UMP update/광고 SDK 초기화 및 광고 요청을 시작하지 않음. 실제 광고 어댑터 configure 및 _age_allowed를 읽어 판단.",
+    "encryptedInTransit": true,
+    "accountsCreated": false,
+    "externalAccountLogin": false,
+    "developerDataDeletionRequest": false,
+    "deletionReason": "개발자가 Google SDK 수집 데이터의 삭제를 실행하거나 90일 이내 자동 삭제를 보장하는 수단은 구현되어 있지 않다. 로컬 게임 기록 삭제와 SDK 데이터 삭제를 구분함.",
+    "localOnlyExcluded": [
+      "진행 기록",
+      "엔딩 기록",
+      "언어 설정",
+      "정확한 연령대 문자열",
+      "로컬 광고 횟수"
+    ],
+    "localAgeQualification": "정확한 연령대 문자열은 로컬. 미성년 여부에서 유도한 TFUA 신호는 UMP 및 광고 요청에 전달되어 기타 개인 정보로 신고.",
+    "references": [
+      "https://developers.google.com/admob/android/next-gen/privacy/play-data-disclosure",
+      "https://developers.google.com/admob/android/next-gen/privacy/gdpr?hl=en",
+      "https://developers.google.com/admob/android/next-gen/targeting?hl=en",
+      "https://support.google.com/googleplay/android-developer/answer/10787469?hl=en"
+    ],
+    "evidence": [
+      "/tmp/starlit-recovery-data-safety.csv",
+      "/tmp/starlit-recovery-data-saved.json",
+      "/tmp/starlit-recovery-data-preview-full.txt",
+      "/tmp/starlit-recovery-data-preview-full.png"
+    ]
+  },
+  "listing": {
+    "state": "saved_ready_for_review_not_sent",
+    "languages": [
+      "ko-KR",
+      "en-US"
+    ],
+    "titles": {
+      "ko-KR": "별빛 견습생",
+      "en-US": "Star Apprentice"
+    },
+    "shortDescription": {
+      "ko-KR": "36번의 선택으로 견습생의 능력과 진로를 만드는 선택형 육성 게임",
+      "en-US": "Guide an apprentice through 36 turns of growth, choices, and story"
+    },
+    "phoneScreenshotCount": {
+      "ko-KR": 5,
+      "en-US": 5
+    },
+    "iconCount": 1,
+    "featureGraphicCount": 1,
+    "tabletsUsed": false,
+    "assetHashes": "/tmp/starlit-recovery-assets.json",
+    "featureGraphicSHA256": "525a8c57fb445d025944334bcfee4ddbe1afcf8b741522666f9b4c78eab04a5e",
+    "evidence": [
+      "/tmp/starlit-recovery-listing-ko-readback.json",
+      "/tmp/starlit-recovery-listing-en-readback.json",
+      "/tmp/starlit-recovery-final-save-contract.json",
+      "/tmp/starlit-recovery-listing-after-final-save.json",
+      "/tmp/starlit-recovery-publishing-after-final-save.json"
+    ],
+    "finalSaveToPublishingOverview": true,
+    "aiLabels": {
+      "savedAndReloadVerified": true,
+      "appliedUniqueAssets": 11,
+      "feature": true,
+      "phoneKo": 5,
+      "phoneEn": 5,
+      "icon": false,
+      "iconStatus": "확정 필요, 생성 출처 확인 안 됨. 미지정 유지.",
+      "sourceManifest": "assets/art/asset-manifest.json model gemini-3-pro-image; assets/art/README.md",
+      "officialHelp": "https://support.google.com/googleplay/android-developer/answer/17262077?hl=ko",
+      "evidence": "/tmp/starlit-recovery-ai-readback.json"
+    },
+    "finalSaveContract": "저장하면 변경사항이 게시 개요에 저장되고 검토를 위해 Google에 전송될 준비가 됩니다.",
+    "finalSaveReadback": "등록정보 목록: 검토를 위해 전송 준비 완료. 게시 개요: 한국어와 영어 각각 앱 이름 및 모든 필수 정보 제공됨."
+  },
+  "finalConsole": {
+    "dashboardSetup": "최종 저장 후 앱 설정 미완료 카드가 사라지고 출시 작업이 열림. 11/11 숫자는 화면에 표시되지 않아 미관측.",
+    "notComplete": "아이콘 생성 출처 확인, 출시 근거 및 앱 제출 단계는 별도 작업",
+    "publishingState": "변경사항이 아직 검토를 위해 제출되지 않음",
+    "managedPublishing": "사용 중지 상태 관측, 변경하지 않음",
+    "evidence": [
+      "/tmp/starlit-recovery-publishing-after-final-save.json",
+      "/tmp/starlit-recovery-dashboard-after-final-save.json",
+      "/tmp/starlit-recovery-listing-after-final-save.json"
+    ]
+  },
+  "uncompleted": [
+    "초기 아이콘 AI 생성 출처 확정",
+    "국가 및 무료 가격 현재값 재확인 미실행, 이번 작업에서 변경 없음",
+    "AdMob 스토어 연결 및 UMP 메시지 설정은 이번 작업 미실행",
+    "기기 및 실제 광고 SDK 검증 미실행"
+  ],
+  "scope": {
+    "productFilesChanged": false,
+    "deviceUsed": false,
+    "aabUploaded": false,
+    "reviewSent": false,
+    "productionChanged": false,
+    "countriesExcluded": false,
+    "audienceExpandedBeyond13Plus": false,
+    "publisherAutoReviewFlagRetry": false
+  },
+  "session": {
+    "previousId": "b2796e9bb72e4e3682b09ac6838497e1",
+    "previousRelease": "normal_success",
+    "id": "809599487efd4bc99c8c895a3660c16a",
+    "release": "normal_success"
+  },
+  "rawEvidence": [
+    {
+      "path": "build/qa/console-recovery/starlit-console-recovery.json",
+      "sha256": "493a69db1ff0f383c199e8e9f8a2299f169e6cb2f59bf8cab7d0ed25a2cea336",
+      "bytes": 37560
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-console-recovery.md",
+      "sha256": "4b433adbcf38a5b530c64b0f89b7fb751f58c676454481c07597e45597893baf",
+      "bytes": 16164
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-ai-readback.json",
+      "sha256": "36860464023cfe75cbaec6c52786e421852b38eb08e85fba7237f47024e04a29",
+      "bytes": 6361
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-ai-readback.png",
+      "sha256": "4307ecf2e81db4a1a56e347003d53f17ac7080019b6be8e3b73143d477c22fa8",
+      "bytes": 77628
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-ai-selected.json",
+      "sha256": "16eae7733ca3f39dfb239f15c7be1a571150b6b1f8776da902e77207890b3db8",
+      "bytes": 2599
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-ai-selected.png",
+      "sha256": "097f4d3fa870a4fac3f40406af88c6007c1b7ce741982f97aec928e18d17bef8",
+      "bytes": 142773
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-assets.json",
+      "sha256": "fa9578f2173bf25f45fd4f3195f26d603018382d11a24154ac41f41ea5d7bcd1",
+      "bytes": 2957
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-content-hashes.json",
+      "sha256": "e726a6b706b30cd977e8bbd6eb8a3cbf03426d26f5d1f406a92d4dbf96c0e380",
+      "bytes": 274
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-dashboard-after-final-save.json",
+      "sha256": "1bb03f12f811de5864a98899a69b59ce8f916c8302176851660d42600617d1d1",
+      "bytes": 2001
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-dashboard-after-final-save.png",
+      "sha256": "bbc80604bf62f6b8f8ce02e18f32b26ea015d4a9da3dd49aada96ca4a1b2ed22",
+      "bytes": 74749
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-dashboard-final.json",
+      "sha256": "013b457fade9ce0bdbcc7c63c4588468f17f9040ba8a91ed213a8f307cc99a2b",
+      "bytes": 2775
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-dashboard-final.png",
+      "sha256": "1ce9b1a1faa4e9e1d2e03eea051ba1bd62c3be00f0dcef99cc312b3bf8b84fa5",
+      "bytes": 67061
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-data-age-inputs.json",
+      "sha256": "590ee09681b2a63f7b897102c12b144549f4264b1a1c0ba4c657f8a217f5f7b8",
+      "bytes": 6173
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-data-device-inputs.json",
+      "sha256": "355065e1c45f30d2e457eadf29c9872efdaeb7a6e7bb1b534570c843c64dac5c",
+      "bytes": 6171
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-data-other-inputs.json",
+      "sha256": "91081191fa8b477c1976c0bfeb68f82bc9f8ef776dc811f5507bc6b56bf6803e",
+      "bytes": 19186
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-data-preview-full.png",
+      "sha256": "eabbfcdc9c40ff71e25dd77bc83f0cfa3cdcf24d8e5e7da5932f1d4d7631d096",
+      "bytes": 86606
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-data-preview-full.txt",
+      "sha256": "46ff3b70c9e78f7b25915f2d54ae7077a8eac64aad93dd355384a43fdf6a13b3",
+      "bytes": 4259
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-data-preview.png",
+      "sha256": "2d7b69ee0b96e46277132c3aeca15f58023efee738e41c393034a48879409577",
+      "bytes": 41759
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-data-preview.txt",
+      "sha256": "0a58d0721f91e94762c61505115af9e16c27bd979c2b7f8b783210ca8951bb2e",
+      "bytes": 2506
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-data-safety.csv",
+      "sha256": "9bfae3165607f34de3c36485132658602b8b3e5e77d12ca2f074d4ae4e8420eb",
+      "bytes": 220617
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-data-saved.json",
+      "sha256": "a99cb9038ae3a877e0e105071e90b5548224f19857806e8427b646c82ea90a65",
+      "bytes": 4571
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-final-save-contract.json",
+      "sha256": "2e37cd7835d638115ef3140755fc70c0d4e3dcd46bc5a359b542ec29a544345b",
+      "bytes": 2777
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-iarc-answers.json",
+      "sha256": "77bbdd35ba0e9430b6acb9982edf28959502c2c79ef57e769740f276ea08e803",
+      "bytes": 7857
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-iarc-answers.png",
+      "sha256": "24470d71bf1f331b821fd5c0841d88b91d6906b2acc5f8c48b448cc240b61d1d",
+      "bytes": 71449
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-iarc-saved.json",
+      "sha256": "16572d58ae02fa7e55aea29b7a309b51c9026523e6839664cc3646b9605d58b9",
+      "bytes": 1242
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-iarc-saved.png",
+      "sha256": "caaff2b7cdefbcffdea48ed6390610378599ddd833141004dbf64020ade406a2",
+      "bytes": 72770
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-iarc-summary.png",
+      "sha256": "23464c7e72aff4e9b464aedc1489d914395e9b3a39426e426c4c18560b9269b5",
+      "bytes": 91596
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-iarc-summary.txt",
+      "sha256": "9d59f4f04f9c951e5917f4b448d05426388cfeae6bf60a6f0e7104ece7bee08b",
+      "bytes": 2545
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-identity.json",
+      "sha256": "32018bef6670314b60ad6d2acd1da8c0e70a2700504c6e44fddc8360172b5b6f",
+      "bytes": 299
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-listing-after-final-save.json",
+      "sha256": "e9bbc653eb416c9d59afd65e88ea70aa7ff578b4f19ef77af2f98ff57b74119f",
+      "bytes": 2419
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-listing-after-final-save.png",
+      "sha256": "bf675100dd8f6054d478d19b5920c88dd860a3403dd175fd8c66cea8d59c114e",
+      "bytes": 68133
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-listing-ai-gate.json",
+      "sha256": "b90704ad665f6f5797b6ab659a83e74e4948beff48dc75dd0d44e3f1c085d224",
+      "bytes": 3155
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-listing-ai-gate.png",
+      "sha256": "55ac85bdfb2a88d923930ea555ea00e9d58ba5fcb086b208a388e12dd7fab9fd",
+      "bytes": 82859
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-listing-en-pre-save.json",
+      "sha256": "a9442cba7a6ceb0c21d55b33c7b04d61c60806cc52dcf96eb2b09bbbd29694e6",
+      "bytes": 3998
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-listing-en-readback.json",
+      "sha256": "58b594fe9e9c2c9e2c845a10f43f2e4eff9172c3321201bfbac91f1433c90921",
+      "bytes": 7023
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-listing-en-readback.png",
+      "sha256": "70c5ef5d63f1ec9c4bf3094a2e2d5fe9194d6e126c019d45fe971531e2a2db6a",
+      "bytes": 78964
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-listing-en-saved.json",
+      "sha256": "1380a31defaae1c90f0fbf0a21b0a51f1f2a5a7677625f8572c3bb5dae78f4dd",
+      "bytes": 5549
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-listing-en-saved.png",
+      "sha256": "5e16a999102326df27b75369e3e1bc474ab4a9f3baff1a4d8f86caaea725299a",
+      "bytes": 78822
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-listing-ko-readback.json",
+      "sha256": "fd4a050a13580674deeb909abb587ca4feed8b5c529c46a84750fdc3245cd899",
+      "bytes": 7230
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-listing-ko-readback.png",
+      "sha256": "5e16a999102326df27b75369e3e1bc474ab4a9f3baff1a4d8f86caaea725299a",
+      "bytes": 78822
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-listing-ko-saved.json",
+      "sha256": "68c281af5b9d77ff8da156597a93c847ec657da7aaafdd5239e90f7c23519e24",
+      "bytes": 7966
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-listing-ko-saved.png",
+      "sha256": "88cdea7c768364d0927db4a12f2e527247cfedaae39f99adf263d1f23ab480de",
+      "bytes": 99325
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-publishing-after-final-save.json",
+      "sha256": "a377c820b88f49571715a8eb07d5d4d0f460ad99bd32e85f2fc245e5ea0d7391",
+      "bytes": 2417
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-publishing-after-final-save.png",
+      "sha256": "98a86668b85dbfaaa9f45760dcfe61177cc01a0c95436e1abf0fd84d67476537",
+      "bytes": 74225
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-publishing-before-ai.txt",
+      "sha256": "72071ceb52b498466f07a5d0eade5dd0dd34a10e3c58f84258b68903855e014f",
+      "bytes": 2361
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-publishing-final.json",
+      "sha256": "496fbc4a3c271542d46c913306499325cf2c09869df5cb12c6a3d0e9ec9f3914",
+      "bytes": 2214
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-publishing-final.png",
+      "sha256": "89ea99377483207646e0defb7797f13b4c8d7c154417d2f48a6ce2050697128b",
+      "bytes": 79688
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-target-saved.json",
+      "sha256": "eb33997271fa46cbaf58ee50e21de31077afe6e379d43816336e01f3bdec7c09",
+      "bytes": 940
+    },
+    {
+      "path": "build/qa/console-recovery/starlit-recovery-target-saved.png",
+      "sha256": "85d274821f9040f6e78474feaf6abe1f4e3053ab6d3223d7c26b6c55f84d18ff",
+      "bytes": 62893
+    }
+  ]
+}
