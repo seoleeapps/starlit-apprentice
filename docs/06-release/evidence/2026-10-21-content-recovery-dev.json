@@ -1,0 +1,144 @@
+{
+  "kind": "content-recovery-development-observation-not-release-gate",
+  "recordedAt": "2026-10-21T11:57:59.522378+00:00",
+  "sourceSha": "f1b0e57e9a0a3771d78084b816fc87c5571b7640",
+  "approval": {
+    "observedAt": "2026-10-21T10:53:24Z",
+    "meaning": "user approval recording time, not inferred message time",
+    "maxRound": 6,
+    "design": "docs/design/2026-10-21-rating-and-review-recovery/design.md"
+  },
+  "ci": {
+    "run": 39594072543,
+    "url": "https://github.com/seoleeapps/starlit-apprentice/actions/runs/39594072543",
+    "status": "completed",
+    "conclusion": "success",
+    "originalsDirectory": "build/qa/release-f1b0e57/ci-39594072543",
+    "artifact": {
+      "artifactId": 12342842704,
+      "name": "headless-e2e-f1b0e57e9a0a3771d78084b816fc87c5571b7640",
+      "archiveSha256": "54f10ce9e0559419720d7ce160868cf684eb74748bb9e37b4b588ad5f3b6a318",
+      "apiDigest": "sha256:54f10ce9e0559419720d7ce160868cf684eb74748bb9e37b4b588ad5f3b6a318",
+      "apiDigestMatches": true,
+      "zipBytes": 35682849,
+      "path": "build/qa/release-f1b0e57/ci-39594072543/headless-e2e-f1b0e57e9a0a3771d78084b816fc87c5571b7640.zip"
+    },
+    "filesMatched": 524,
+    "journeys": 10,
+    "allJourneyReportsPassed": true,
+    "pngs": 276,
+    "strictLogs": 68,
+    "strictErrors": []
+  },
+  "preflight": {
+    "cleanRegressionPasses": 2,
+    "qualityGatePasses": 2,
+    "sourceArchiveSha256": "fe99d090efab5146020f2e786e076c975bf69313320782992bf478c22502fcb7",
+    "execution": {
+      "path": "build/qa/recovery-f1b0e57e9a0a/preflight/execution.json",
+      "sha256": "5209df3baf4060b2e687b122312097c5478e4ca8d037b180fd417672271c4412",
+      "bytes": 3484
+    }
+  },
+  "review4": {
+    "number": 4,
+    "reviewer": "/root/e2e",
+    "plannedAt": "2026-10-21T11:45:54.215602Z",
+    "startedAt": "2026-10-21T11:45:54.216189Z",
+    "completedAt": "2026-10-21T11:49:55.642239Z",
+    "functional": "passed",
+    "ux": "passed",
+    "features": [
+      "core-loop",
+      "card-scroll",
+      "events",
+      "monthly-settlement",
+      "endings",
+      "save",
+      "localization",
+      "settings",
+      "ads",
+      "audio"
+    ],
+    "locales": [
+      "ko",
+      "en"
+    ],
+    "viewports": [
+      "640x1136",
+      "720x1280",
+      "720x1600"
+    ],
+    "scenarios": 96,
+    "steps": 5892,
+    "pngs": 276,
+    "newEventInputsPerJourney": 17,
+    "review": {
+      "path": "build/qa/recovery-f1b0e57e9a0a/round4/review.json",
+      "sha256": "abb5d8238a70ee6a0ab8fb9681268673e692e877e6df94486e0706616c88d647",
+      "bytes": 2342
+    },
+    "manifest": {
+      "path": "build/qa/recovery-f1b0e57e9a0a/round4/sha256sums.txt",
+      "sha256": "c95bab138e0d0a80a4f67c28ed170ea96260a50a1a21b7ec470ee0a395d37d58",
+      "bytes": 53456
+    }
+  },
+  "history": {
+    "preservedNumbers": [
+      1,
+      2,
+      3
+    ],
+    "completeNewNumbers": [
+      4
+    ],
+    "notExecutedNumbers": [
+      5,
+      6
+    ],
+    "incompleteMetadataNotFilled": true,
+    "audit": {
+      "path": "build/qa/review-history-recovery-20261021/independent-original-audit.json",
+      "sha256": "95870b6009de0cc36996970406879d61a4a63a495b66b3fecb7e9423e4350f41",
+      "bytes": 2996
+    }
+  },
+  "tdd": [
+    {
+      "path": "build/qa/rating-recovery/red.log",
+      "sha256": "d390209becf34276a0fb4cd177772d7fa5e3339ebe0a9a0d66b87b28fae261a3",
+      "bytes": 2171
+    },
+    {
+      "path": "build/qa/rating-recovery/green.log",
+      "sha256": "447e067a92a55cc2a731c9c970e91891bd4674d55e71fecd0e82e2153c53c74f",
+      "bytes": 109
+    },
+    {
+      "path": "build/qa/release-4728452/sdk-checker-red.log",
+      "sha256": "44ded2656011b40df10c860ca462f5f7fe5ea5586c2a885c29853fefd475d57f",
+      "bytes": 2832
+    },
+    {
+      "path": "build/qa/release-4728452/sdk-checker-green.log",
+      "sha256": "77d3d8e492fcc4244934939e318d126e0c1ea60e47744120c3eb6c4b11f4ef3d",
+      "bytes": 1012
+    }
+  ],
+  "runtimeSdkAndDeviceTested": false,
+  "fullDevelopmentEvidenceCreated": false,
+  "beforeBuildGateExecuted": false,
+  "releaseTagAllocated": false,
+  "signedAabBuilt": false,
+  "playBundleUploaded": false,
+  "reviewSubmitted": false,
+  "publicVerified": false,
+  "blockers": [
+    "Age Signals ingestion absent for approved teen/global distribution; scope and new candidate review approval requested",
+    "Only one complete new review4; reviews5/6 not executed",
+    "Current central recovery format cannot preserve complete superseded4 and receive fresh5-7 without a formal extension",
+    "Registered provisioner lacks Publisher IAM policy and workload identity pool list read access; no identity or permission change performed",
+    "Android UMP/ad SDK/runtime and public store installation checks unrun; no device approval"
+  ]
+}

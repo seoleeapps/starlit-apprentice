@@ -1,0 +1,333 @@
+{
+  "record_type": "provider_followup_console_configuration",
+  "observed_at": "2026-10-21T12:00:45.132174+00:00",
+  "source_sha": "f1b0e57e9a0a3771d78084b816fc87c5571b7640",
+  "candidate_sha": "f1b0e57e9a0a3771d78084b816fc87c5571b7640",
+  "scope": "가격, 국가, AdMob 스토어 연결 및 준비 상태, 앱 전용 UMP. 제품 및 기존 동결 원장 변경 없음.",
+  "play": {
+    "price": {
+      "state": "무료 확인됨",
+      "changed": false
+    },
+    "countries": {
+      "state": "저장 후 페이지 재로드 확인",
+      "previous_count": 0,
+      "targeted_count": 178,
+      "all_selectable_rows": true,
+      "includes_korea": true,
+      "includes_other_countries": true,
+      "approval_or_live_availability": false
+    },
+    "review_submission_performed": false,
+    "bundle_upload_performed": false,
+    "production_release_performed": false
+  },
+  "admob": {
+    "store_link": {
+      "state": "차단",
+      "search": "com.seorilabs.starlitapprentice",
+      "result_rows": 0,
+      "action": "검색 결과를 읽고 취소. 다른 앱이나 스토어 선택 없음.",
+      "next_condition": "정확한 공개 Play 스토어 등록이 검색될 때 연결"
+    },
+    "approval_state_observed": "검토 필요",
+    "serving_state_observed": "광고 게재가 제한됨. 스토어를 추가하여 한도 해제.",
+    "ready": false,
+    "app_verification": "선택 항목, Verify app 표시. 실행하지 않음.",
+    "app_ads_txt": {
+      "public_http_status": 200,
+      "expected_publisher_line_present": true,
+      "provider_app_verification_not_proven": true,
+      "changed": false
+    },
+    "unit": {
+      "format": "interstitial",
+      "count": 1,
+      "mediationGroups": 0,
+      "observedAt": "2026-10-21T11:59:25.972781+00:00"
+    }
+  },
+  "ump": {
+    "existing_checked": {
+      "eu_messages": 6,
+      "eu_shared_apps": 32,
+      "us_messages": 5,
+      "us_shared_apps": 41,
+      "target_in_existing_shared_messages": false
+    },
+    "eu": {
+      "name": "Star Apprentice Android GDPR",
+      "state": "게시됨, 새 페이지 로드 후 checked=true 확인",
+      "apps": [
+        "Star Apprentice Android"
+      ],
+      "language": "en",
+      "fallback": "지원되지 않는 기기 언어는 영어 기본값",
+      "additional_languages": [],
+      "target": "EEA, 영국, 스위스",
+      "do_not_consent": "모든 지역 사용, 첫 화면 1회 클릭 거부",
+      "close_do_not_consent": true,
+      "manage_options": true,
+      "privacy_policy_url": "https://www.seorilabs.com/en/apps/starlit-apprentice/privacy/",
+      "observed_publish_utc": "2026-10-21T11:58:26.030213+00:00",
+      "privacy_url_readback_after_publish": {
+        "observed_at": "2026-10-21T12:02:54.075867+00:00",
+        "url": "https://admob.google.com/v2/privacymessaging/gdpr",
+        "selected_rows": [
+          "이름개인정보처리방침 URL      help_outline대체 동의 수집      help_outline\n",
+          "Star ApprenticeID: — | Androidhttps://www.seorilabs.com/en/apps/starlit-apprentice/privacy/\n"
+        ],
+        "star_checked": "true",
+        "privacy_url": "Star Apprentice\nID: — | Android\nhttps://www.seorilabs.com/en/apps/starlit-apprentice/privacy/"
+      }
+    },
+    "us": {
+      "name": "Star Apprentice Android US states",
+      "state": "게시됨, 새 페이지 로드 후 checked=true 확인",
+      "apps": [
+        "Star Apprentice Android"
+      ],
+      "language": "en-US",
+      "target": "현재 및 향후 지원되는 모든 미국 주",
+      "current_states_selected": 20,
+      "opt_out": "Don't sell or share my data 및 Save and close",
+      "observed_publish_utc": "2026-10-21T11:57:37.185687+00:00"
+    },
+    "korean_message": "공급자 지원 불가. 실제 언어 메뉴 및 공식 10107561에서 유럽 32개, 미국 en/es/es-419 확인. 한국어 완료로 주장하지 않음.",
+    "ad_partners": "전역 기존값 상속. GDPR 미리보기 210개 파트너, 계정 설정 일반 파트너 자동 포함 198개 관측. 앱별 override 없음. 전역 파트너, 계정 권한, 동의 모드, 다른 앱 메시지 미변경.",
+    "withdrawal_entry": "제품 타이틀 Ad Privacy Settings/광고 개인정보 설정. SDK privacy options status REQUIRED이며 다른 update/form이 진행 중이 아닐 때 show_privacy_options_form 호출. 아니면 안내. 현재 소스 읽기 확인으로, SDK 기기 실행 증거가 아님.",
+    "propagation_notice": "공급자 확인 대화상자는 앱 표시까지 최대 1시간이 걸릴 수 있다고 안내.",
+    "native_runtime_verified": false
+  },
+  "not_run": [
+    "기기 조회, 설치, 실행 및 광고 클릭",
+    "SDK 실제 UMP 폼 표시, 닫기, 재선택 및 광고 송출",
+    "신규 API 접근 신청",
+    "Play 검토를 위해 전송, 변경사항 전송",
+    "AAB 빌드 및 업로드",
+    "production 승격 및 공개"
+  ],
+  "remaining_gates": [
+    "AdMob 정확한 공개 스토어 패키지 연결 및 앱 검토, app-ads.txt 공급자 확인",
+    "브라질 청소년 Age Signals 등 후속 제품 변경과 검수는 root 소유로 미실행",
+    "출시 근거와 중앙 검증에 따른 별도 Play 제출 및 공개 단계",
+    "한국어 UMP 폼은 현재 공급자 미지원"
+  ],
+  "official_sources": [
+    "https://support.google.com/googleplay/android-developer/answer/7550024",
+    "https://support.google.com/admob/answer/10113207?hl=en",
+    "https://support.google.com/admob/answer/10860309?hl=en",
+    "https://support.google.com/admob/answer/10107561?hl=en",
+    "https://support.google.com/admob/answer/10113004?hl=en"
+  ],
+  "source_files": [
+    {
+      "path": "data/events.json",
+      "sha256": "7013618a0524dba5397523709b2fb4a82e521fee8587f10ecf33a3d18181e042"
+    },
+    {
+      "path": "data/i18n/ko.json",
+      "sha256": "5e4fe7dc723c8f10d8f2fe8680a5a1213413c57a37eb41576ea71ab7cb246a1c"
+    },
+    {
+      "path": "data/i18n/en.json",
+      "sha256": "fd5c1813354de480e6c376f555efc302e6fe27ca7199beef01fb5ef13711f20c"
+    },
+    {
+      "path": "src/platform/android_admob_adapter.gd",
+      "sha256": "45579175b576f1a6faabee0e29538037522cb705f19483952fef9da9fb0be0f9"
+    },
+    {
+      "path": "src/ui/main.gd",
+      "sha256": "93ed68fb6e49d282d0166109254cc88a1f52de3c84cc909e1c578e3c06330ddf"
+    }
+  ],
+  "recordedAt": "2026-10-21T12:04:34.371724+00:00",
+  "identity": {
+    "play_developer_name": "Seolee Apps",
+    "play_account_type": "개인",
+    "play_developer_id": "5547060480954653351",
+    "play_app_id": "4972457200651625275",
+    "package": "com.seorilabs.starlitapprentice",
+    "admob_publisher_id": "pub-9932778305312246",
+    "admob_app_name": "Star Apprentice",
+    "admob_app_id": "ca-app-pub-9932778305312246~5434157983",
+    "ad_unit": "ca-app-pub-9932778305312246/5426594130"
+  },
+  "rawEvidence": [
+    {
+      "path": "build/qa/provider-followup/starlit-provider-play-identity.json",
+      "bytes": 2967,
+      "sha256": "30d891a113b60aeeab59a44b825b277dae209d572993c23a61a4ae0f506128dd"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-price-readback.json",
+      "bytes": 1339,
+      "sha256": "0f9556fdc8054f02480272af8143047893749a672371458bb665f5a33209cae6"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-price-readback.png",
+      "bytes": 50160,
+      "sha256": "d76c5fa8bc9aae8129318a53184a8a05de83d3509a9d3c4016f15a5270161f83"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-countries-before.json",
+      "bytes": 1070,
+      "sha256": "fd54933095ef6299478179aff49a3857a41a6d2994a303cedb1f89cba1f9e992"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-countries-selected.json",
+      "bytes": 15537,
+      "sha256": "24f989a4a7fd20ec0485e6ef1b2636cadc264b5d1b5bf08a5494479e1bda9d3e"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-countries-saved.json",
+      "bytes": 8587,
+      "sha256": "bd7d03bd1f345d5982e1850583fb7afe15603305e0121a30c036b4bbe18fbbfb"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-countries-reloaded.json",
+      "bytes": 8587,
+      "sha256": "bd7d03bd1f345d5982e1850583fb7afe15603305e0121a30c036b4bbe18fbbfb"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-countries-korea.png",
+      "bytes": 68047,
+      "sha256": "5fbdb3fb9d3a6ae855d7f86d92597cf24adc334d56b8452c39992d3b8100e4c3"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-admob-identity.json",
+      "bytes": 175,
+      "sha256": "4c1cf58cfe46c63841289b4bea330232f84347474e14d04c2ff81b2811534af9"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-admob-app-before.json",
+      "bytes": 1298,
+      "sha256": "65bb4f8a41fcef5cc2d777cf46402434e14e7259806b69b0688f5460d313d366"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-admob-settings-before.json",
+      "bytes": 1338,
+      "sha256": "2b2f43962fc7e73774b509ba9cdb530a0545ff4913937fceb67cfdc6f6734a7f"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-store-search.json",
+      "bytes": 1296,
+      "sha256": "34364543cbff8edabecda589fb5febc9e7bb8af35e7931552a254508ea6bd045"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-store-search.png",
+      "bytes": 71631,
+      "sha256": "97864697cbc86ac23ba1d71a64a72960fae8faa582f84839155a31d235ae7cbb"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-ump-eu-shared-selected.json",
+      "bytes": 5129,
+      "sha256": "1dcf30b0f9cc126fb16c0d948707686ddb14c8ac4fb812414aabfdb300d8c4d9"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-ump-us-shared-selected.json",
+      "bytes": 4497,
+      "sha256": "ab393039303bd69f215fb6daaf115bc62243a3b2e330098a4609b22028485617"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-ump-account-settings.json",
+      "bytes": 9298,
+      "sha256": "dd12b7aa2c211173d1b84123f5a55f67456aed7c3ca492a2c57610adb35452db"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-ump-eu-choices.json",
+      "bytes": 5805,
+      "sha256": "508bfb95c9b2e9bc30379cc3391e181ad1b87e725ef3c264d1bc5158dc870617"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-ump-eu-draft-readback.json",
+      "bytes": 1798,
+      "sha256": "8fcb47793c86e9ea70f4357f884fb0622aa84b22752100ba04cf7925fe61744e"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-ump-eu-editor.json",
+      "bytes": 2174,
+      "sha256": "afd4de14ee4df2d52fed9997db9f73e604e6b57e8c40a59b88c4093c25f27173"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-ump-eu-editor.png",
+      "bytes": 118923,
+      "sha256": "ffc5360b5031f848dd981681f31cf381a3e84e62602ee3dc61b3ff636a0f6ea7"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-ump-us-editor.json",
+      "bytes": 3694,
+      "sha256": "d214ba418f8a2253107e9017707577db8518a6c7a6aa055e10ae0f38bf307840"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-ump-us-editor.png",
+      "bytes": 74104,
+      "sha256": "c3c7cfa5b9e4d0f79f9ed503e6122e9f6e845d337df8634cf670c035a15d0bb3"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-ump-eu-published.json",
+      "bytes": 655,
+      "sha256": "7d05e7f3a4f2e8149d01915fe2a10400b3b2094a0db666e2876370e1546766ba"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-ump-us-published.json",
+      "bytes": 519,
+      "sha256": "9e180272135b7f3cac4a4d3606730eb6bd29876f865fd12bbf00e48173acb4ba"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-ump-gdpr-reloaded.png",
+      "bytes": 85790,
+      "sha256": "22c49d61f2808b57e290049fbd7abbf6c0ea37d45597eedaa02b3b8bb4eb75dc"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-ump-usstates-reloaded.png",
+      "bytes": 89424,
+      "sha256": "88f3f418214ceccb5f044ae43254ff4e6f034452bdc34e34543c267156150472"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-admob-final.png",
+      "bytes": 85537,
+      "sha256": "fdc6fcae088d5a3beb954f044a3aa56c83324db5e5cf0fc10c061b31b0a6ca95"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-final-readback.json",
+      "bytes": 11380,
+      "sha256": "2c60ce79d99618272f0b3502646ae2a7db9b92d9deef0b070d72b0983801a1a0"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-unit-final.json",
+      "bytes": 1453,
+      "sha256": "17d1dbf23c10baddb8a3f6ed10722fd07cd48ca57cf653b7f6b958af0e1a7e4e"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-public-urls.json",
+      "bytes": 743,
+      "sha256": "f1fa72fe091a81fe7b999eaa367ae7971da342c0d8891d387f25138b675912b2"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-ump-privacy-readback.json",
+      "bytes": 489,
+      "sha256": "85ddef0bc776bbd5a4fbb32e472338511ff499eeeb3f7e76452298ec53c3bbba"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-ump-privacy-readback.png",
+      "bytes": 57262,
+      "sha256": "db46b9b5d6302fec30c5b71e3712ac6b93c91102d8b680756456d7b57e360b55"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-followup.json",
+      "bytes": 16394,
+      "sha256": "2962212f5c38de60b4d6ba76d47ca7cb9d6aaf7e2fd2a03926f78926e180b0e8"
+    },
+    {
+      "path": "build/qa/provider-followup/starlit-provider-followup.md",
+      "bytes": 10734,
+      "sha256": "9cc8aabaadaaf5e319f1884bc22a614ec41f3b4e142a82c78042f27c60a2ca71"
+    }
+  ],
+  "session": {
+    "released": true,
+    "releasedAt": "2026-10-21T12:03:31.422344+00:00"
+  }
+}

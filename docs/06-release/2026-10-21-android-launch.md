@@ -120,3 +120,15 @@ Godot이 첫 import에서 자동 보정한 vendor CSV 번역 목적지 경로도
 [후속 Console 관측](evidence/2026-10-21-console-recovery.json)은2026-10-21T11:35:14Z 기준이다. 수정 콘텐츠를 대조한 새 IARC가 저장됐고 한국 GRAC 전체이용가, 호주 ACB 일반으로 표시되어13세 이상 대상과 충돌하지 않았다. 이는 기관의 최종 심사 승인과 공개 허가를 뜻하지 않는다. 타겟13~15세,16~17세와18세 이상, SDK기준6개 데이터 유형의 데이터 보안 신고도 저장했다. ko/en 이름과 설명, 언어별 실제 휴대전화 화면5장, 공통 아이콘과 큰 이미지는 최종 저장되어 검토 전송 준비 상태가 됐다. 기존 AI 생성 삽화를 포함한11개 이미지의 AI라벨을 적용하고 재조회했다. 초기 픽셀 아이콘은 확인된 생성형 이미지 출처가 없어 미지정으로 남겼다. Google검토 전송, AAB업로드와production변경은 하지 않았다. 무료 가격과 전체 국가의 현재값, AdMob연결과UMP메시지는 별도 후속 확인 대상이다.
 
 최종 AAB 검사기의 사전 확인에서 Next-Gen SDK를 쓰는 제품에 이전 SDK의 경로를 요구한 문제를 발견했다. 이전 Google 광고 ID 클래스만 있어도 통과하고 올바른 Next-Gen 클래스만 있으면 실패하는 두 경우와 전면광고 진입점 누락을 먼저 재현했다. 현재 vendor AAR이 참조하는 Next-Gen MobileAds, InterstitialAd와 UMP UserMessagingPlatform의 정확한 DEX descriptor를 확인하도록 고쳤고 회귀 검사4개를 추가했다. 제품 UI는 바꾸지 않았다. 새 독립 UI4 계획과 실행은 이 확인 동안 시작하지 않았으며 다음 후보에 다시 고정한다.
+
+## f1b0e57 개발 검증과 추가 지역 조건
+
+[후속 개발 관측](evidence/2026-10-21-content-recovery-dev.json)은 후보f1b0e57에만 결속한다. [CI39594072543](https://github.com/seoleeapps/starlit-apprentice/actions/runs/39594072543)가 통과했고 독립 개발 실행의 캐시 없는 전체 회귀2회와quality gate2회도 통과했다. 독립 UI4는 두 언어와세 화면 크기의96시나리오,5,892단계와PNG276장을 검수해 기능10개와 사용성을 통과했다. UI5와6은 계획과 실행을 시작하지 않았다. 초기 결손1~3회와UI4 원본을 보존하며 전체 추가 검수3회 완료나before-build 통과로 표시하지 않는다.
+
+전체 국가 설정을 확인하면서 [Google의 브라질 배포 요건](https://support.google.com/googleplay/android-developer/answer/6223646?hl=en-GB)을 다시 읽었다. 청소년 대상 앱의 스토어 연령 범위 수신이 계획에서 빠져 있었다. 현재 수동 연령과UMP만으로 이 수신 요건을 충족했다고 판단하지 않는다. [보완 설계](../design/2026-10-21-play-age-signals/design.md)는 미승인 제안이며Age Signals0.0.4 수신, 광고 및 분석 흐름과 분리, 새 후보의 독립UI5~7과 정확한 과거UI4 보존 경로를 제안한다. API정보를 광고에 사용하는 것은 [Google 이용 조건](https://developer.android.com/google/play/age-signals/overview#terms-service)이 금지한다. 새 플랫폼 구현과 추가 회차는 승인 대기이며 기존 대상 국가를 임의로 제외하지 않았다.
+
+최종AAB, 내부 업로드, 실제native검수와공개는 여전히 미실행이다. 원격 버전 원장 baseline0만 생성됐고 출시 태그는 할당하지 않았다. WIF는 기존identity로 `iam.workloadIdentityPools.list`도 권한 거부되어 provider와 repository전용 binding을 확인할 수 없다. 기존 관리자가 확인할 최소 대상은 `seoleeapps/starlit-apprentice`와 공통Publisher다. 다른identity, 새정적키, 조직전체binding과Play권한 확대는 사용하지 않았다.
+
+[공급자 후속 관측](evidence/2026-10-21-provider-followup.json)에서 무료 가격의 기존값과 한국 및 기타 국가를 포함한178개 선택 가능 국가 전체 저장, 재조회 결과를 확인했다. AdMob의 정확한 패키지 검색 결과는0개여서 다른 앱을 선택하지 않고 취소했다. 앱은 스토어 미연결, 검토 필요와 광고 게재 제한 상태이며 웹 app-ads.txt 게시자 일치가 공급자 앱 검증 완료를 뜻하지 않는다. 실제 전면광고단위1개와미디에이션0개도 다시 읽었다.
+
+앱 전용 GDPR와미국 주 규정 UMP메시지2개는 게시한 뒤 다시 로드해 활성 상태를 확인했다. GDPR는EEA,영국과스위스,미국 메시지는 현재와향후 지원되는 모든 미국 주를 대상으로 한다. 영어 기본값과영문 개인정보처리방침을 사용하며, 첫 화면 거부와재선택 경로를 준비했다. 한국어 UMP폼은 공급자가 지원하지 않아 영어로 표시된다. 기존 계정의 광고 파트너210개를 상속하는 범위를 기록했고 전역 파트너, 다른 앱의 메시지와계정 권한은 바꾸지 않았다. 이 Console설정 완료는 실제Android SDK폼 및광고 표시 검수의 증거가 아니다. 브라우저 세션을 정상 종료했다.
