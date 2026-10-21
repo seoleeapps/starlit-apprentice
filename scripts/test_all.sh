@@ -12,7 +12,7 @@ run_godot() {
 }
 python3 -m unittest discover -s "${script_dir}/tests" -p 'test_*.py' -v
 run_godot import "${godot_bin}" --headless --path "${project_dir}" --import --quit
-for runner in core_test endings_lint balance simulation localization native_ad_adapter test save_load audio layout_probe; do
+for runner in core_test endings_lint balance simulation localization rating_content native_ad_adapter test save_load audio layout_probe; do
   script="${runner}_runner"
   case "${runner}" in layout_probe) script="${runner}" ;; esac
   run_godot "${runner}" "${godot_bin}" --headless --path "${project_dir}" --resolution 720x1280 --script "res://tests/${script}.gd"

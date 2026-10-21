@@ -27,7 +27,7 @@ func _run() -> void:
 	_check(english["actions"][0]["label"] == "Letters", "action label translated")
 	_check(english["npcs"][0]["name"] == "Sera", "NPC name translated")
 	_check(english["events"][0]["choices"][2]["locked_reason"] == "Requires at least 120 gold", "locked threshold retained")
-	_check(english["events"][0]["choices"][2]["outcomes"][0]["result_text"].begins_with("The medicine"), "outcome translated")
+	_check(english["events"][0]["choices"][2]["outcomes"][0]["result_text"].begins_with("Warm meals"), "outcome translated")
 	_check(english["endings"][1]["requirements"][0]["label"] == "Debt", "requirement label translated")
 	_check(english["paths"][0]["label"] == "Path of Stars", "path metadata translated")
 	_check(english["affinity_bands"][0]["name"] == "Stranger", "affinity metadata translated")
