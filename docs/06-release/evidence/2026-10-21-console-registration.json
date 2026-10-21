@@ -1,0 +1,190 @@
+{
+  "kind": "play-console-registration-observation",
+  "observedAt": "2026-10-21T10:34:46.492031+00:00",
+  "account": {
+    "name": "Seolee Apps",
+    "type": "PERSONAL",
+    "developerId": "5547060480954653351"
+  },
+  "app": {
+    "appId": "4972457200651625275",
+    "package": "com.seorilabs.starlitapprentice",
+    "status": "draft"
+  },
+  "savedAndReadBack": {
+    "privacyPolicyUrl": "https://www.seorilabs.com/apps/starlit-apprentice/privacy/",
+    "ads": true,
+    "restrictedAppAccess": false,
+    "governmentApp": false,
+    "financialFeatures": false,
+    "healthFeatures": false,
+    "category": "GAME_SIMULATION",
+    "contactEmail": "cs@seorilabs.com",
+    "IARC": "완료됨; Console 제출시각2026-10-21 19:28KST; 인증ID표시 -"
+  },
+  "dashboardCompletedItems": 8,
+  "dashboardTotalItems": 11,
+  "iarc": {
+    "ratings": {
+      "Australia": "ACB18+ / 유사한 도박 행위",
+      "Korea": "GRAC15세이상 / 약물",
+      "Taiwan": "15세이상 부모지도",
+      "Saudi Arabia": "16세",
+      "Brazil": "10세 / 합법적 마약, 부적절한 언어",
+      "North America": "ESRB 전체이용가 / 음주 관련, 약간 거친 표현",
+      "Europe": "PEGI3",
+      "Germany": "USK전체",
+      "IARC Generic": "3세",
+      "Russia": "3세"
+    },
+    "questionSubstances": "게임에 약물이나 술, 흡연을 언급하거나 사용하는 내용이 포함되어 있나요? 사용자 생성 콘텐츠에는 해당하지 않습니다.",
+    "substanceAnswers": {
+      "yes": true,
+      "medical": [
+        "언급",
+        "사용",
+        "드물게"
+      ],
+      "alcohol": [
+        "언급",
+        "드물게"
+      ],
+      "illegalRecreational": false,
+      "fantasyDrugs": false,
+      "tobacco": false,
+      "glorification": false
+    },
+    "questionGambling": "게임에 도박, 카지노 도박/빙고 모사, 도박 테마가 있습니까? 사용자 생성 콘텐츠에는 해당하지 않습니다.",
+    "gamblingAnswers": [
+      "예",
+      "도박 테마",
+      "인게임 화폐/토큰을 이용하여 플레이하고, 게임플레이를 통해 동일한 화폐를 보상할 수 있는 기타 게임",
+      "눈에 띄는 특징이나 핵심: 아니요"
+    ],
+    "languageAnswers": [
+      "예",
+      "사소한 욕설",
+      "드물게"
+    ],
+    "otherAnswers": {
+      "violence": false,
+      "fear": false,
+      "sexualContent": false,
+      "crudeHumor": false,
+      "digitalPurchasesCashRewardsNFT": false,
+      "userInteraction": false,
+      "preciseLocationSharing": false,
+      "nazi": false,
+      "KoreanNationalIdentityHarm": false,
+      "terrorismAdvocacy": false,
+      "realisticCrimeTechniques": false
+    },
+    "medicalDefinition": "의료용 약물은 일반적으로 불법이 아니며 의료 목적으로 사용되는 약물. 남용될 수 있는 약물이라도 의료 목적 사용이면 해당.",
+    "medicalHelp": "https://support.google.com/googleplay/android-developer/answer/12990741?hl=ko",
+    "gamblingThemeHelp": "https://support.google.com/googleplay/android-developer/answer/12990239?hl=ko",
+    "casinoHelp": "https://support.google.com/googleplay/android-developer/answer/12992546?hl=ko"
+  },
+  "sourceEventIds": [
+    "cond.burnout.enter",
+    "npc.gu.02",
+    "opp.plague-ward",
+    "opp.wager-table",
+    "world.guild-dispute"
+  ],
+  "listing": {
+    "apiCommitted": false,
+    "apiAbortedEdit": true,
+    "error": "400 Changes are sent for review automatically. The query parameter changesNotSentForReview must not be set.",
+    "retryWithoutFlag": false,
+    "initialSavedListings": [
+      {
+        "language": "ko-KR",
+        "title": "별빛 견습생"
+      }
+    ],
+    "englishSaved": false,
+    "imagesSaved": false,
+    "stagedThenAbortedImages": 12,
+    "koreanConsoleDraftSaved": true,
+    "koreanConsoleDraftReloadVerified": true,
+    "consoleImageUploadAvailable": true,
+    "consoleImageUploadExecuted": false
+  },
+  "uncompleted": [
+    "타겟층13+는 등급결과충돌로 미작성, 변경안함",
+    "데이터보안 미작성",
+    "영어 등록문구와 모든 이미지 저장 미완료(API자동심사거부); 한국어는 Console 임시보관함 저장 후 reload확인",
+    "태그 미작성",
+    "국가/가격의 현재상태 재확인 미실행, 변경안함",
+    "AdMob스토어연결/UMP메시지 미실행",
+    "운영광고SDK/기기검증 미실행"
+  ],
+  "scope": {
+    "deviceUsed": false,
+    "aabUploaded": false,
+    "sentForGoogleReview": false,
+    "productionChanged": false,
+    "contentChanged": false,
+    "ageExpanded": false,
+    "countriesExcluded": false
+  },
+  "blockers": [
+    "IARC observed Korea15+/Australia18+ conflicts with approved13+ and all-available-countries target; no content, audience or country changes made.",
+    "PublisherAPI rejected changesNotSentForReview; edit deleted, no retry causing automatic review before release gates."
+  ],
+  "dataSafetyResearch": {
+    "sdk": "GoogleGMA NextGen1.4.0+UMP through Poingv5.1.0",
+    "url": "https://developers.google.com/admob/android/next-gen/privacy/play-data-disclosure",
+    "automaticCollectionSharing": [
+      "IP address/general location",
+      "user product interactions",
+      "diagnostic information",
+      "device and account identifiers"
+    ],
+    "purposes": [
+      "advertising",
+      "analytics",
+      "fraud prevention"
+    ],
+    "transport": "TLS",
+    "formSaved": false
+  },
+  "rawEvidence": [
+    {
+      "path": "build/qa/console-registration/starlit-console-registration.md",
+      "sha256": "47bec26953cb41b3d5c616b5eb3ba821ef4e0d3ef480161b8f4e5b37af39d70c",
+      "bytes": 10198
+    },
+    {
+      "path": "build/qa/console-registration/starlit-console-registration.json",
+      "sha256": "f84bcfa8ce6812d3e4cc66ca461038e5462d6b8dce42e741527de4e3713e36e8",
+      "bytes": 19462
+    },
+    {
+      "path": "build/qa/console-registration/starlit-iarc-summary.txt",
+      "sha256": "6fa9427b3eba11ea9353f83f1abd0a9fad18a6637f610154c189c959867495e1",
+      "bytes": 2978
+    },
+    {
+      "path": "build/qa/console-registration/starlit-iarc-summary.png",
+      "sha256": "85e59e7f31ba3485c0023f8a4b67291a310661f7c6cdb37ee2c2ae37c67d3119",
+      "bytes": 99010
+    },
+    {
+      "path": "build/qa/console-registration/starlit-listing-ko-draft-readback.json",
+      "sha256": "6cb92b0cbdf60f5f429413f65a847c497258113d453172b3abfc48a4c4ecd97e",
+      "bytes": 4778
+    },
+    {
+      "path": "build/qa/console-registration/starlit-listing-ko-draft.png",
+      "sha256": "002dd859d1395ecb60859c9274fa92f2bb3bd6dbb72da9cad20924125a818029",
+      "bytes": 77991
+    },
+    {
+      "path": "build/qa/console-registration/starlit-play-listing-api-result.json",
+      "sha256": "5400116af5f0adb84d9aa7cdb6d24c3d3f79149094c6ac815449d10db5917e52",
+      "bytes": 8817
+    }
+  ],
+  "browserSessionReleased": true
+}

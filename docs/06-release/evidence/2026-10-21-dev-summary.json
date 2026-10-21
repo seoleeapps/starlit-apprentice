@@ -1,0 +1,108 @@
+{
+  "kind": "android-launch-development-summary",
+  "sourceSha": "123f271136a9406d8390df8d17090a6a97b248c4",
+  "approvedCommit": "ab2769047ef858c58022738ebe651406acd507e9",
+  "centralSha": "a6dc6937f37eb5783ae249cfc315ba00f11fabfc",
+  "startedAt": "2026-10-21T10:11:39.976206Z",
+  "executionCompletedAt": "2026-10-21T10:14:48.797659Z",
+  "visualReviewCompletedAt": "2026-10-21T10:20:52.817557Z",
+  "developmentStatus": "passed",
+  "releaseEvidenceStatus": "blocked",
+  "environment": {
+    "kind": "dev",
+    "os": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "godotVersion": "4.7.2.stable.official.ed1daf0bf",
+    "rendering": "Metal 4.0 / Forward Mobile / Apple M3",
+    "seed": 4242,
+    "clockStart": 1792540800
+  },
+  "saveIsolation": "Separate temporary directory per process via STARLIT_SAVE_DIR; removed after execution",
+  "regressionPasses": 2,
+  "qualityGatePasses": 2,
+  "uiRound3": {
+    "status": "passed",
+    "locales": [
+      "ko",
+      "en"
+    ],
+    "viewports": [
+      [
+        640,
+        1136
+      ],
+      [
+        720,
+        1280
+      ],
+      [
+        720,
+        1600
+      ]
+    ],
+    "journeys": 6,
+    "scenarioCountPerJourney": 9,
+    "featureCount": 10,
+    "pngs": 72,
+    "representativePngsVisuallyReviewed": 54
+  },
+  "localizationChecks": 8324,
+  "nativeAdAdapterContract": {
+    "status": "passed",
+    "checks": 15,
+    "nativeSingleton": "fake; no Android SDK display evidence"
+  },
+  "engineErrorOrLeakLogs": [],
+  "inputSource": "Exact git archive of sourceSha",
+  "generatedImportMetadataDifferences": [
+    {
+      "path": "addons/admob/internal/translations/admob_sample.csv.import",
+      "change": "Godot regenerated CSV translation import destination paths from staged vendor prefix to actual addon path.",
+      "diffEvidence": "build/qa/final-123f271136a9/generated-import-diff.txt"
+    }
+  ],
+  "productSourceDifferencesAfterRun": [],
+  "historicalUiReviews": [
+    {
+      "round": 1,
+      "functionalStatus": "passed",
+      "uxStatus": "failed",
+      "evidence": "../ui-round1-review.json",
+      "sourceSnapshot": "not-recorded; dirty working tree; not candidate-bound"
+    },
+    {
+      "round": 2,
+      "functionalStatus": "failed",
+      "uxStatus": "passed",
+      "evidence": "../ui-round2-review.json",
+      "sourceSnapshot": "not-recorded; dirty working tree; not candidate-bound"
+    }
+  ],
+  "blocker": "Rounds1/2 executed on dirty tree without sourceSha/snapshot and numeric plannedAt; no retrospective binding or pass claim. A newly approved review cycle is required before-build.",
+  "originalEvidence": [
+    {
+      "path": "build/qa/final-123f271136a9/development-run-summary.json",
+      "sha256": "5164410dee4ceb76fdfc3c6fb91533b5e38e970ee6b4cc55bf054cf89f943ce2",
+      "bytes": 36451
+    },
+    {
+      "path": "build/qa/final-123f271136a9/ui-round3-review.json",
+      "sha256": "906e5e09ec3f3bfebc04f9decf9af6074691b978e98b79c52254e63b89a06bc5",
+      "bytes": 9246
+    },
+    {
+      "path": "build/qa/final-123f271136a9/execution.json",
+      "sha256": "f8ef9b30fa8e84ef15e084149f0c3e31d8564f1e4f77847427ec66b8e603b87d",
+      "bytes": 3437
+    },
+    {
+      "path": "build/qa/final-123f271136a9/sha256sums.txt",
+      "sha256": "196db305072728ba526ca6c8866d423fb32105bf803748a5d3b7d9436731ccb0",
+      "bytes": 17626
+    }
+  ],
+  "nativeSdk": "unrun; device access requires separate explicit approval",
+  "aab": "unbuilt",
+  "playUpload": "unrun",
+  "publicRelease": "unrun"
+}
