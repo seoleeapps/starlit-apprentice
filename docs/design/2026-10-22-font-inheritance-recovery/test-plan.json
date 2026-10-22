@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "level": "L3",
+  "baseline": null,
+  "changedFeatures": [
+    "core-loop",
+    "card-scroll",
+    "events",
+    "monthly-settlement",
+    "endings",
+    "save",
+    "localization",
+    "settings",
+    "ads",
+    "audio",
+    "age-protection"
+  ],
+  "environments": [
+    "dev"
+  ],
+  "redesign": true,
+  "foundationRerun": true,
+  "floorOverrides": [],
+  "release": {
+    "markets": [
+      "google-play"
+    ],
+    "until": "public",
+    "rollout": 1
+  }
+}

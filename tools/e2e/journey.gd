@@ -472,8 +472,33 @@ func _controller() -> SaRunController:
 	return main.get("_run") as SaRunController
 
 func _shot(name: String) -> void:
+	_check_visible_fonts(name)
 	_check_locale(name)
 	await e2e.shot(name)
+
+func _check_visible_fonts(context: String) -> void:
+	var faults: Array[String] = []
+	var ui := root.get_node("Ui")
+	var expected: Font = (ui.get("theme") as Theme).default_font
+	_find_font_faults(main, expected, faults)
+	e2e.step("실제 화면의 번들 폰트와 한글 글리프 %s" % context, faults.is_empty(), str(faults))
+
+func _find_font_faults(node: Node, expected: Font, faults: Array[String]) -> void:
+	if node == null or node.is_queued_for_deletion():
+		return
+	if node is Control and node.is_visible_in_tree() and (node is Label or node is Button):
+		var control := node as Control
+		var font := control.get_theme_font("font")
+		if font == null or font != expected:
+			faults.append("%s: bundled font is not effective" % node.name)
+		else:
+			var text := String(node.get("text"))
+			for index in text.length():
+				var codepoint := text.unicode_at(index)
+				if codepoint >= 0xAC00 and codepoint <= 0xD7A3 and not font.has_char(codepoint):
+					faults.append("%s: missing Hangul U+%04X" % [node.name, codepoint])
+	for child in node.get_children():
+		_find_font_faults(child, expected, faults)
 
 func _check_locale(context: String) -> void:
 	if locale != "en" or main == null:

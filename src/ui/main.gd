@@ -32,6 +32,7 @@ var _boundary_turn := -1
 var _input_locked := false
 
 func _ready() -> void:
+	theme = Ui.theme
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	var bg := ColorRect.new()
 	bg.color = SaUiKit.BG_NIGHT
