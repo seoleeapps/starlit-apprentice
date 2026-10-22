@@ -13,6 +13,101 @@ import zipfile
 
 ANDROID_NS = "http://schemas.android.com/apk/res/android"
 PACKAGE = "com.seorilabs.starlitapprentice"
+# These three exception types are defined by play-services-basement:18.9.0,
+# required by the pinned Next-Gen Ads, UMP and Play Age Signals SDKs.
+# They do not permit FirebaseApp, product SDKs, encoders or future namespaces.
+GOOGLE_COMMON_EXCEPTIONS = frozenset({
+    "Lcom/google/firebase/FirebaseException;",
+    "Lcom/google/firebase/FirebaseApiNotAvailableException;",
+    "Lcom/google/firebase/FirebaseExceptionMapper;",
+})
+RUNTIME_CONFIG = "assetPackInstallTime/assets/config/android_runtime.json"
+
+
+def dex_firebase_types(data):
+    # Android's standard DEX type_ids include both defined and referenced types.
+    # Reject unsupported/container formats instead of silently inspecting part.
+    if (len(data) < 112 or not re.fullmatch(rb"dex\n(?:035|037|038|039|040)\x00", data[:8])
+            or struct.unpack_from("<III", data, 32) != (len(data), 112, 0x12345678)):
+        raise ValueError("unsupported or malformed DEX header")
+
+    def table(header_offset, stride):
+        count, offset = struct.unpack_from("<II", data, header_offset)
+        if count and (offset < 112 or offset + count * stride > len(data)):
+            raise ValueError("DEX table outside file")
+        return count, offset
+
+    string_count, strings = table(56, 4)
+    type_count, types = table(64, 4)
+    class_count, classes = table(96, 32)
+    descriptors = []
+    for index in range(type_count):
+        string_index = struct.unpack_from("<I", data, types + index * 4)[0]
+        if string_index >= string_count:
+            raise ValueError("invalid DEX descriptor index")
+        offset = struct.unpack_from("<I", data, strings + string_index * 4)[0]
+        if offset < 112 or offset >= len(data):
+            raise ValueError("invalid DEX string offset")
+        for shift in range(0, 35, 7):
+            if offset >= len(data):
+                raise ValueError("truncated DEX string length")
+            byte = data[offset]
+            offset += 1
+            if byte < 128:
+                break
+        else:
+            raise ValueError("invalid DEX string length")
+        end = data.find(b"\0", offset)
+        if end < 0:
+            raise ValueError("unterminated DEX descriptor")
+        # Other class names may use modified UTF-8. Firebase names are ASCII.
+        value = data[offset:end].lstrip(b"[")
+        descriptors.append(value.decode("ascii") if value.startswith(b"Lcom/google/firebase/") else None)
+    defined = set()
+    for index in range(class_count):
+        type_index = struct.unpack_from("<I", data, classes + index * 32)[0]
+        if type_index >= type_count:
+            raise ValueError("invalid DEX class index")
+        if descriptors[type_index]:
+            defined.add(descriptors[type_index])
+    return set(filter(None, descriptors)), defined
+
+
+def check_firebase_runtime(dex_entries, manifest_names, errors):
+    types, defined, per_dex = set(), set(), {}
+    if not dex_entries:
+        errors.append("AAB has no DEX entries to inspect for Firebase dependencies")
+    for name, data in sorted(dex_entries.items()):
+        try:
+            references, definitions = dex_firebase_types(data)
+        except (ValueError, IndexError, struct.error) as error:
+            errors.append(f"{name}: {error}")
+            continue
+        types.update(references)
+        defined.update(definitions)
+        per_dex[name] = {"firebaseTypes": sorted(references), "definedFirebaseTypes": sorted(definitions)}
+    unexpected = types - GOOGLE_COMMON_EXCEPTIONS
+    manifest_matches = sorted(name for name in manifest_names if "firebase" in str(name).lower())
+    if unexpected or manifest_matches:
+        errors.append("unexpected Firebase runtime dependency")
+    return {"commonExceptionTypes": sorted(types & GOOGLE_COMMON_EXCEPTIONS),
+            "definedFirebaseTypes": sorted(defined), "unexpectedTypes": sorted(unexpected),
+            "manifestMatches": manifest_matches, "dexEntries": per_dex}
+
+
+def check_runtime_config(archive, ad_unit, errors):
+    report = {"path": RUNTIME_CONFIG, "interstitialAdUnitIdMatches": False}
+    try:
+        if archive.namelist().count(RUNTIME_CONFIG) != 1:
+            raise ValueError("exactly one install-time Android runtime config is required")
+        content = archive.read(RUNTIME_CONFIG)
+        config = json.loads(content)
+        if not ad_unit or not isinstance(config, dict) or config.get("interstitialAdUnitId") != ad_unit:
+            raise ValueError("production interstitial ID differs from exported runtime config")
+        report.update(interstitialAdUnitIdMatches=True, sha256=hashlib.sha256(content).hexdigest())
+    except (ValueError, UnicodeError, KeyError) as error:
+        errors.append(f"Android runtime config: {error}")
+    return report
 
 
 def check_age_sdk_classes(dex, metadata, errors):
@@ -202,6 +297,7 @@ def inspect_aab(path, args, errors):
         if not app_id or metadata.get("com.google.android.gms.ads.APPLICATION_ID") != app_id:
             errors.append("AAB AdMob application ID differs from production input")
         dex = bytearray()
+        dex_entries = {}
         runtime = bytearray()
         for name in archive.namelist():
             if name.endswith(".so"):
@@ -210,18 +306,17 @@ def inspect_aab(path, args, errors):
                 except ValueError as error:
                     errors.append(f"{name}: {error}")
             if re.fullmatch(r"base/dex/classes\d*\.dex", name):
-                dex.extend(archive.read(name))
-            if name.startswith("base/assets/") and name.endswith((".json", ".pck", ".gd", ".gdc")):
+                dex_entries[name] = archive.read(name)
+                dex.extend(dex_entries[name])
+            if name.startswith(("base/assets/", "assetPackInstallTime/assets/")) and name.endswith((".json", ".pck", ".gd", ".gdc")):
                 runtime.extend(archive.read(name))
         if not native:
             errors.append("Godot AAB has no native libraries to inspect")
         check_ad_sdk_classes(dex, errors)
         check_age_sdk_classes(dex, metadata, errors)
-        if b"com/google/firebase/" in dex or any(
-                "firebase" in str(attrs.get((ANDROID_NS, "name"), "")).lower() for _, attrs in manifest):
-            errors.append("unexpected Firebase runtime dependency")
-        if ad_unit and ad_unit.encode() not in runtime:
-            errors.append("production interstitial ID was not found in exported runtime config")
+        firebase = check_firebase_runtime(dex_entries,
+            [attrs.get((ANDROID_NS, "name"), "") for _, attrs in manifest], errors)
+        runtime_config = check_runtime_config(archive, ad_unit, errors)
         for resource in ("data/actions.json", "data/events.json", "data/endings.json", "data/npcs.json",
                          "data/i18n/ko.json", "data/i18n/en.json", "data/monetization/interstitial-policy.json"):
             if not any(name.endswith("/" + resource) for name in archive.namelist()) and resource.encode() not in runtime:
@@ -241,6 +336,7 @@ def inspect_aab(path, args, errors):
         errors.append("AAB signing certificate differs from the approved upload certificate")
     return {**actual, "targetSdk": target, "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
             "nativeLoadAlignments": native, "sourceOnly": False,
+            "firebaseInspection": firebase, "androidRuntimeConfig": runtime_config,
             "certificateSha256": fingerprint,
             "expectedCertificateComparison": ("matched" if expected == fingerprint else "mismatch") if expected else "not-provided",
             "signing": "verified" if not result.returncode and "jar verified." in result.stdout else "failed",

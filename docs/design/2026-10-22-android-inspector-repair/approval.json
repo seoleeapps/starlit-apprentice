@@ -1,0 +1,21 @@
+{
+  "kind": "human-approved-tool-only-repair",
+  "userMessage": "승인",
+  "approvalObservedAt": "2026-10-22T03:35:24Z",
+  "exactUserSentAt": null,
+  "approvedProposalDesignSha256": "66057047b5bfb765e36cf9d818a9138bd815202b584220008a02f0db7790612a",
+  "approvedTestPlanSha256": "4af6835b647629134b163b7c0c362f6a9d209e52c4c628dcefc7bbd116c55344",
+  "scope": [
+    "Android artifact inspection tool and its regression tests",
+    "central failed-AAB diagnostic preservation through normal PR",
+    "one fresh L3 development CI on new candidate",
+    "new1.0.1 ledger tag and signed build followed by existing authorized launch scope"
+  ],
+  "excluded": [
+    "device access",
+    "UI15 or additional UI redesign reviews",
+    "game/UI/content/storage/SDK/export changes",
+    "key creation or IAM changes"
+  ],
+  "historicalSourceSha": "8eafe3a41e71da87a3534a68fd71b72caf5168b8"
+}
