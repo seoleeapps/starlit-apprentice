@@ -10,6 +10,18 @@ const AgeAccessCases := preload("res://tools/e2e/age_access_cases.gd")
 const TestStorage := preload("res://tools/e2e/fakes/storage.gd")
 const RatingEventFixture := preload("res://tools/e2e/fakes/rating_event_fixture.gd")
 
+# 직접 캡처도 같은 검사 경계를 거친다. 입력과 캡처는 기존 도우미가 실행한다.
+class FontCheckingDriver extends Driver:
+	var check_fonts: Callable
+
+	func _init(p_tree: SceneTree, size: Vector2i, directory: String, capture_enabled: bool, checker: Callable) -> void:
+		super(p_tree, size, directory, capture_enabled)
+		check_fonts = checker
+
+	func shot(name: String) -> void:
+		check_fonts.call(name)
+		await super.shot(name)
+
 var e2e: RefCounted
 var clock := FakeClock.new()
 var ad: SaAdAdapter
@@ -45,7 +57,7 @@ func _run() -> void:
 	out = _arg("--out", "res://build/e2e/%s" % locale)
 	var width := int(_arg("--width", "720"))
 	var height := int(_arg("--height", "1280"))
-	e2e = Driver.new(self, Vector2i(width, height), out, OS.get_cmdline_user_args().has("--capture"))
+	e2e = FontCheckingDriver.new(self, Vector2i(width, height), out, OS.get_cmdline_user_args().has("--capture"), _check_visible_fonts)
 	profile.set_language(locale)
 	AdPolicyCases.new().run(e2e)
 	await _first_session()
@@ -472,7 +484,6 @@ func _controller() -> SaRunController:
 	return main.get("_run") as SaRunController
 
 func _shot(name: String) -> void:
-	_check_visible_fonts(name)
 	_check_locale(name)
 	await e2e.shot(name)
 
